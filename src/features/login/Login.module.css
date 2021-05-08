@@ -1,0 +1,112 @@
+.login__form {
+    display: flex;
+    justify-content: center;
+    margin-top: 10vh;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    width: 420px;
+    height: 500px;
+    box-shadow: 0px 6px 11px -3px rgba(0,0,0,0.4);
+    border-radius: 20px;
+}
+.form__user{
+    margin-top: 30px;
+}
+.form__user div{
+    font-size: 30px;
+    color: #3e3f5e;
+    margin-bottom: 10px;
+}
+.form__user img{
+    width: 80px;
+}
+.form__username{
+    position: relative;
+    margin-top: 10px;
+}
+.form__username div label{
+    display: inline-block;
+    font-size: 17px;
+    letter-spacing: 1px;
+    padding-bottom: 5px;
+}
+.form__username input {
+    border: none;
+    width: 320px;
+    height: 50px;
+    padding-left: 10px;
+    background-color: rgb(232,232,232);
+    border-radius: 5px 5px 0 0;
+    font-size: 18px;
+    border-bottom: 2px solid rgb(140,140,140);
+}
+.form__password{
+    position: relative;
+    margin-top: 10px;
+}
+.form__password div label{
+    display: inline-block;
+    font-size: 17px;
+    letter-spacing: 1px;
+    padding-bottom: 5px;
+}
+.form__password input{
+    border: none;
+    width: 320px;
+    height: 50px;
+    padding-left: 10px;
+    background-color: rgb(232,232,232);
+    border-radius: 5px 5px 0 0;
+    font-size: 18px;
+    border-bottom: 2px solid rgb(140,140,140);
+}
+.form__remember{
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+.form__remember div label{
+    display: inline-block;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+.form__remember input{
+   margin-left: 10px;
+}
+.form__forgot{
+    margin-top: 30px;
+}
+.form__forgot a{
+    text-decoration: none;
+    font-size: 14px;
+    color: #657bc3;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.form__registration{
+    margin-top: 5px;
+}
+.form__registration a{
+    text-decoration: none;
+    font-size: 14px;
+    color: #657bc3;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.form__submit{
+    margin-top: 25px;
+}
+.form__submit button{
+    height: 46px;
+    width: 320px;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 11px 30px;
+    background-color: #64c37d;
+    color: rgb(255, 255, 255);
+}
