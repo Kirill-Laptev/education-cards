@@ -1,5 +1,6 @@
+const initialState = {}
 //@ts-ignore
-export const registrationReducer = (state, action) => {
+export const registrationReducer = (state = initialState, action) => {
     switch(action.type){
 
         default:
