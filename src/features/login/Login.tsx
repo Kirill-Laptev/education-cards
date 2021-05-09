@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginTC } from '../../redux/login-reducer/login-reducer'
 import { AppRootStateType } from '../../redux/store'
 import { TextError } from '../../helpers/TextError'
-import ErrorPopup from '../../components/ErrorPopup/ErrorPopup'
+import AlertPopup from '../../components/AlertPopup/AlertPopup'
 
 
 const LoginForm: React.FC = () => {
@@ -129,7 +129,7 @@ const LoginForm: React.FC = () => {
                     </form>
                 </div>
             </div>
-            <ErrorPopup />
+            <AlertPopup message={serverErrorMessage}/>
         </>
     )
 }

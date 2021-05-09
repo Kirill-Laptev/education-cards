@@ -18,9 +18,6 @@ export const loginAPI = {
     fetchLoginData: (data: {email: string, password: string, rememberMe: boolean}) => {
         return instance.post<LoginResponseType>('auth/login', data)
     },
-    updateProfile: (data: {name: string, avatar: string}) => {
-        return instance.put('auth/me', data)
-    },
     recoveryPassword: (data: {email: string, from: string, message: string}) => {
         return instance.post('auth/forgot', data)
     },
@@ -28,6 +25,12 @@ export const loginAPI = {
         return instance.post<MultiResponseType>('auth/set-new-password', data)
     }
 }
+
+// export const profileAPI = {
+//     updateProfile: (data: {name: string, avatar: string}) => {
+//         return instance.put('auth/me', data)
+//     },
+// }
 
 // types
 

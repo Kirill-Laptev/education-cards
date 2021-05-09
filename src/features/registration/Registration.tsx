@@ -1,11 +1,12 @@
 import React, { useState, FocusEvent, useEffect } from 'react'
 import noteImg from '../../assets/img/note.svg'
 import s from './Registration.module.css'
-import { Redirect } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from '../../redux/store'
 import { TextError } from '../../helpers/TextError'
-import ErrorPopup from '../../components/ErrorPopup/ErrorPopup'
+import AlertPopup from '../../components/AlertPopup/AlertPopup'
+import { registrationTC } from '../../redux/registration-reducer/registration-reducer'
 
 
 const Registration: React.FC = () => {
@@ -31,12 +32,18 @@ const Registration: React.FC = () => {
 
 
     const dispatch = useDispatch()
+    const history = useHistory()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
+    const isRegisterSuccess = useSelector<AppRootStateType, boolean>((state) => state.registration.isRegisterSuccess)
+    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.registration.error)
 
-    if(isLoggedIn) {
-        return <Redirect to='/profile' />
-    }
+    useEffect(() => {
+        if(isRegisterSuccess) {
+            setTimeout(() => {
+                history.push('/login')
+            }, 3000)
+        }    
+    }, [isRegisterSuccess])
 
 
     const emailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +55,7 @@ const Registration: React.FC = () => {
                 setEmailError('Email field is required')
             }
         } else {
-            setEmailError('') 
+            setEmailError('')  // Поправить 
         }
     }
 
@@ -91,7 +98,7 @@ const Registration: React.FC = () => {
         if(password !== passwordConfirm){
             setPasswordConfirmError('Different passwords')
         } else {
-            console.log('success')
+            dispatch(registrationTC({email, password}))
         }
     }
 
@@ -143,7 +150,7 @@ const Registration: React.FC = () => {
                     </form>
                 </div>
             </div>
-            <ErrorPopup />
+            <AlertPopup message={serverErrorMessage} isRegisterSuccess={isRegisterSuccess}/>
         </>
     )
 }

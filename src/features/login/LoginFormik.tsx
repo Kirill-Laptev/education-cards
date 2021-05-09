@@ -8,7 +8,7 @@ import { NavLink, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginTC } from '../../redux/login-reducer/login-reducer'
 import { AppRootStateType } from '../../redux/store'
-import ErrorPopup from '../../components/ErrorPopup/ErrorPopup'
+import AlertPopup from '../../components/AlertPopup/AlertPopup'
 
 const InitialValues = {
     email: '',
@@ -80,7 +80,7 @@ const LoginForm: React.FC = () =>  {
                             }
                         </Formik>
                     </div>
-                    <ErrorPopup />
+                    <AlertPopup />
                 </div>
             </>
         )
