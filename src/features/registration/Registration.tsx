@@ -1,38 +1,38 @@
 import React, { useState, FocusEvent, useEffect } from 'react'
-import enterImg from '../../assets/img/enter.svg'
-import s from './Login.module.css'
-import { NavLink, Redirect } from 'react-router-dom'
+import noteImg from '../../assets/img/note.svg'
+import s from './Registration.module.css'
+import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginTC } from '../../redux/login-reducer/login-reducer'
 import { AppRootStateType } from '../../redux/store'
 import { TextError } from '../../helpers/TextError'
 import ErrorPopup from '../../components/ErrorPopup/ErrorPopup'
 
 
-const LoginForm: React.FC = () => {
+const Registration: React.FC = () => {
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [rememberMe, setRememberMe] = useState<boolean>(false)
+    const [passwordConfirm, setPasswordConfirm] = useState<string>('')
     const [emailTouched, setEmailTouched] = useState<boolean>(false)
     const [passwordTouched, setPasswordTouched] = useState<boolean>(false)
+    const [passwordConfirmTouched, setPasswordConfirmTouched] = useState<boolean>(false)
     const [emailError, setEmailError] = useState<string>('Email field is required')
     const [passwordError, setPasswordError] = useState<string>('Password is required')
+    const [passwordConfirmError, setPasswordConfirmError] = useState<string>('Password is required')
     const [isFormValid, setIsFormValid] = useState<boolean>(false)
 
     useEffect(() => {
-        if(emailError || passwordError){
+        if(emailError || passwordError || passwordConfirmError){
             setIsFormValid(false)
-        } else{
+        } else {
             setIsFormValid(true)
         }
-    }, [emailError, passwordError])
+    }, [emailError, passwordError, passwordConfirmError])
 
 
     const dispatch = useDispatch()
 
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
-    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.login.error)
 
     if(isLoggedIn) {
         return <Redirect to='/profile' />
@@ -51,21 +51,28 @@ const LoginForm: React.FC = () => {
             setEmailError('') 
         }
     }
-    const passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.currentTarget.value)
-        if(e.currentTarget.value.length < 7){
-            setPasswordError('Min length 7 symbols')
-            if(!e.currentTarget.value){
-                setPasswordError('Password is required')
+
+    const passwordValidation = (password: string, setState: Function, setError: Function) => {
+        setState(password)
+        if(password.length < 7){
+            setError('Min length 7 symbols')
+            if(!password){
+                setError('Password is required')
             }
         } else{
-            setPasswordError('')
+            setError('')
         }
     }
-    const remeberMeChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRememberMe(e.currentTarget.checked)
-    }
 
+    const passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.currentTarget.name === 'password'){
+            passwordValidation(e.currentTarget.value, setPassword, setPasswordError)
+        }
+        if(e.currentTarget.name === 'passwordConfirm'){
+            passwordValidation(e.currentTarget.value, setPasswordConfirm, setPasswordConfirmError)
+        }
+    }
+ 
 
     const blurHandler = (e: FocusEvent<HTMLInputElement>) => {
         if(e.currentTarget.name === 'email'){
@@ -74,24 +81,31 @@ const LoginForm: React.FC = () => {
         if(e.currentTarget.name === 'password'){
             setPasswordTouched(true)
         }
+        if(e.currentTarget.name === 'passwordConfirm'){
+            setPasswordConfirmTouched(true)
+        }
     }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        dispatch(loginTC({email, password, rememberMe}))
+        if(password !== passwordConfirm){
+            setPasswordConfirmError('Different passwords')
+        } else {
+            console.log('success')
+        }
     }
 
     return (
         <>
             <div className={s.login__form}>
                 <div className={s.form}>
-                    <div className={s.form__user}>
-                        <div>SIGN IN</div>
-                        <img src={enterImg} />
+                    <div className={s.form__header}>
+                        <div>REGISTRATION</div>
+                        <img src={noteImg}/>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <div className={s.form__username}>
-                            <div><label htmlFor='email'>username</label></div>
+                        <div className={s.form__email}>
+                            <div><label htmlFor='email'>email</label></div>
                             <input 
                             type='text' 
                             id='email' 
@@ -112,19 +126,19 @@ const LoginForm: React.FC = () => {
                             onBlur={blurHandler}/>
                             {(passwordError && passwordTouched) && <TextError>{passwordError}</TextError>}
                         </div>
-                        <div className={s.form__remember}>
-                            <div><label htmlFor='rememberMe'>remember me</label></div>
+                        <div className={s.form__password}>
+                            <div><label htmlFor='passwordConfirm'>confirm password</label></div>
                             <input 
-                            type='checkbox' 
-                            id='rememberMe' 
-                            name='rememberMe' 
-                            checked={rememberMe}
-                            onChange={remeberMeChangeHandler}/>
+                            type='password' 
+                            id='passwordConfirm' 
+                            name='passwordConfirm' 
+                            value={passwordConfirm}
+                            onChange={passwordChangeHandler}
+                            onBlur={blurHandler}/>
+                            {(passwordConfirmError && passwordConfirmTouched) && <TextError>{passwordConfirmError}</TextError>}
                         </div>
-                        <div className={s.form__forgot}><NavLink to='/forgotpassword'>Forgot password ?</NavLink></div>
-                        <div className={s.form__registration}><NavLink to='/registration'>Registration here</NavLink></div>
                         <div className={s.form__submit}>
-                            <button type='submit' disabled={!isFormValid}>Login</button>
+                            <button type='submit' disabled={!isFormValid}>Sign up</button>
                         </div>
                     </form>
                 </div>
@@ -136,4 +150,5 @@ const LoginForm: React.FC = () => {
 
 
 
-export default LoginForm
+export default Registration
+

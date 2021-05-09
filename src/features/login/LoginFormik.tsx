@@ -70,7 +70,7 @@ const LoginForm: React.FC = () =>  {
                                             <Field type='checkbox' id='rememberMe' name='rememberMe'/>
                                         </div>
                                         <div className={s.form__forgot}><NavLink to='/forgotpassword'>Forgot password ?</NavLink></div>
-                                        <div className={s.form__registration}><NavLink to='/registaration'>Registration here</NavLink></div>
+                                        <div className={s.form__registration}><NavLink to='/registration'>Registration here</NavLink></div>
                                         <div className={s.form__submit}>
                                             <button type='submit'>Login</button>
                                         </div>

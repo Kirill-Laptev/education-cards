@@ -1,3 +1,4 @@
+import { setUserDataAC, SetUserDataActionType } from './../profile-reducer/profile-reducer';
 import { AppRootStateType } from './../store';
 import { loginAPI } from './../../api/loginAPI';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
@@ -13,7 +14,7 @@ export const loginReducer = (state: InitialStateType = initialState, action: Log
         case 'SET_USER_DATA':
             return {
                 ...state,
-                isLoggedIn: true
+                isLoggedIn: action.isLoggedIn
             }
 
         case 'SET_ERROR_MESSAGE':
@@ -29,7 +30,7 @@ export const loginReducer = (state: InitialStateType = initialState, action: Log
 
 
 // actions
-export const setIsLoggedIn = () => ({type: 'SET_USER_DATA'} as const)
+export const setIsLoggedIn = (isLoggedIn: boolean) => ({type: 'SET_USER_DATA', isLoggedIn} as const)
 export const setErrorMessage = (errorMessage: string) => ({type: 'SET_ERROR_MESSAGE', errorMessage} as const)
 
 
@@ -37,12 +38,12 @@ export const setErrorMessage = (errorMessage: string) => ({type: 'SET_ERROR_MESS
 export const loginTC = (formData: {email: string, password: string, rememberMe: boolean}): ThunkType => {
     return async (dispatch: DispatchType) => {
         try{
-            const res = await loginAPI.fetchLoginData(formData)
-            dispatch(setIsLoggedIn())
+            const {data} = await loginAPI.fetchLoginData(formData)
+            dispatch(setUserDataAC(data))
+            dispatch(setIsLoggedIn(true))
         }
         catch(e){
-            console.log(e.response)
-            dispatch(setErrorMessage(e.response.data.error))
+            dispatch(setErrorMessage(e.response ? e.response.data.error : e.message))
             dispatch(setErrorMessage(''))
         }
     }
@@ -55,11 +56,10 @@ type InitialStateType = {
     error: string
 }
 
-export type SetIsLoggedInActionType = ReturnType<typeof setIsLoggedIn>
-
 export type LoginActionsType = 
-| SetIsLoggedInActionType
+| ReturnType<typeof setIsLoggedIn>
 | ReturnType<typeof setErrorMessage>
+| SetUserDataActionType
 
 type DispatchType = ThunkDispatch<AppRootStateType, unknown, LoginActionsType>
 type ThunkType = ThunkAction<void, AppRootStateType, unknown, LoginActionsType>

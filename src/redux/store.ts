@@ -1,5 +1,5 @@
 import { passwordReducer } from './password-reducer/password-reducer';
-import { profileReducer } from './profile-reducer/profile-reducer';
+import { profileReducer, ProfileActionsType } from './profile-reducer/profile-reducer';
 import { registrationReducer } from './registration-reducer/registration-reducer';
 import { loginReducer, LoginActionsType } from './login-reducer/login-reducer';
 import { combineReducers, createStore, applyMiddleware } from "redux";
@@ -18,3 +18,7 @@ export type AppRootStateType = ReturnType<typeof rootReducer>
 
 export type AllAppActionsType = 
 | LoginActionsType
+| ProfileActionsType
+
+// @ts-ignore
+window.store = store

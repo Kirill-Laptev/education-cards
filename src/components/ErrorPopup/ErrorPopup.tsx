@@ -11,6 +11,7 @@ const ErrorPopup: React.FC = () => {
     const viewError = () => {
         if(errorMessage === 'user not found /ᐠ-ꞈ-ᐟ\\') return 'user not found'
         if(errorMessage === 'not correct password /ᐠ-ꞈ-ᐟ\\') return 'not correct password'
+        if(errorMessage === 'not valid email/password /ᐠ-ꞈ-ᐟ\\') return 'not valid email/password'
         return 'server error'
     }
 
