@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const settings = {
-    baseURL: "http://localhost:7542/2.0/",
-    // baseURL: "https://neko-back.herokuapp.com/2.0",
+    // baseURL: "http://localhost:7542/2.0/",
+    baseURL: "https://neko-back.herokuapp.com/2.0",
     withCredentials: true
 }
 
@@ -18,8 +18,13 @@ export const loginAPI = {
     fetchLoginData: (data: {email: string, password: string, rememberMe: boolean}) => {
         return instance.post<LoginResponseType>('auth/login', data)
     },
-    recoveryPassword: (data: {email: string, from: string, message: string}) => {
-        return instance.post('auth/forgot', data)
+    forgotPass: (email: string) => {
+        return instance.post<ForgotType>(`auth/forgot`, {email,
+            from: "test-front-admin <ai73a@yandex.by>",
+            message: `<div style="background-color: lime; padding: 15px">
+                 password recovery link:
+                 <a href='http://marygrishchuk.github.io/cards-by-dream-team/#/set-new-password/$token$'>
+                 Reset Password</a></div>`})
     },
     setNewPassword: (data: {password: string, resetPasswordToken: string}) => {
         return instance.post<MultiResponseType>('auth/set-new-password', data)
@@ -63,3 +68,8 @@ export type UpdateProfileResponseType = {
     error?: string
 }
 
+
+export type ForgotType = {
+    info: string
+    error?: string
+}
