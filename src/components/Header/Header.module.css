@@ -23,7 +23,7 @@
     font-size: 18px;
     cursor: pointer;
 }
-.header__logout button{
+.header__btns button{
     height: 46px;
     width: 110px;
     border-radius: 5px;

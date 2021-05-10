@@ -1,7 +1,8 @@
 .login__form {
     display: flex;
     justify-content: center;
-    margin-top: calc(50vh - 300px);
+    /* margin-top: calc(50vh - 300px); */
+    margin-top: 10vh;
 }
 .form{
     display: flex;

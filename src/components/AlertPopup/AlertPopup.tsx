@@ -2,13 +2,15 @@ import React, { useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-const AlertPopup: React.FC<ErrorPopupPropsType> = ({message, isRegisterSuccess}) => {
+const AlertPopup: React.FC<ErrorPopupPropsType> = ({message, serverRequestSuccess}) => {
 
     const viewMessage = () => {
         if(message === 'user not found /ᐠ-ꞈ-ᐟ\\') return 'user not found'
         if(message === 'not correct password /ᐠ-ꞈ-ᐟ\\') return 'not correct password'
         if(message === 'not valid email/password /ᐠ-ꞈ-ᐟ\\') return 'not valid email/password'
         if(message === 'email already exists /ᐠ｡ꞈ｡ᐟ\\') return 'that username is taken'
+        if(message === 'Email address not found /ᐠ-ꞈ-ᐟ\\') return 'Email adress not found'
+        if(message === 'no resetPasswordToken, Check your request! /ᐠ-ꞈ-ᐟ\\') return 'Please check your email and click on recovery link'
         return 'server error'
     }
 
@@ -17,15 +19,15 @@ const AlertPopup: React.FC<ErrorPopupPropsType> = ({message, isRegisterSuccess})
         if(message){
             toast(viewMessage().toUpperCase())
         }
-        if(isRegisterSuccess){
+        if(serverRequestSuccess){
             toast('success ✔️'.toUpperCase())
         }
-    }, [message, isRegisterSuccess])
+    }, [message, serverRequestSuccess])
   
     return (
         <div>
             <ToastContainer  
-            position="bottom-center"
+            position="bottom-right"
             autoClose={4000}
             hideProgressBar
             newestOnTop={false}
@@ -43,5 +45,5 @@ export default AlertPopup
 // types
 type ErrorPopupPropsType = {
     message?: string
-    isRegisterSuccess?: boolean
+    serverRequestSuccess?: boolean | string
 }

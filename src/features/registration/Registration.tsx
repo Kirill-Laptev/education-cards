@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from '../../redux/store'
 import { TextError } from '../../helpers/TextError'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
-import { registrationTC } from '../../redux/registration-reducer/registration-reducer'
+import { registrationTC, setIsRegisterSuccessAC } from '../../redux/registration-reducer/registration-reducer'
+import { validateEmail } from '../../helpers/validators/validators'
 
 
 const Registration: React.FC = () => {
@@ -42,6 +43,7 @@ const Registration: React.FC = () => {
         if(isRegisterSuccess) {
             setTimeout(() => {
                 history.push('/login')
+                dispatch(setIsRegisterSuccessAC(false))
             }, 3000)
         }    
     }, [isRegisterSuccess])
@@ -54,14 +56,15 @@ const Registration: React.FC = () => {
 
     const emailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(!re.test(String(e.currentTarget.value).toLowerCase())){
+
+        const isValidEmail = validateEmail(e.currentTarget.value)
+        if (isValidEmail) {
             setEmailError('Incorrect email format')
             if(!e.currentTarget.value){
                 setEmailError('Email field is required')
             }
         } else {
-            setEmailError('')  // Поправить 
+            setEmailError('')  
         }
     }
 
@@ -156,7 +159,7 @@ const Registration: React.FC = () => {
                     </form>
                 </div>
             </div>
-            <AlertPopup message={serverErrorMessage} isRegisterSuccess={isRegisterSuccess}/>
+            <AlertPopup message={serverErrorMessage} serverRequestSuccess={isRegisterSuccess}/>
         </>
     )
 }
