@@ -1,7 +1,7 @@
 .login__form {
     display: flex;
     justify-content: center;
-    margin-top: 10vh;
+    margin-top: calc(50vh - 300px);
 }
 .form{
     display: flex;
@@ -82,7 +82,7 @@
 }
 .form__forgot a{
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     color: #657bc3;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -92,7 +92,7 @@
 }
 .form__registration a{
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     color: #657bc3;
     font-weight: 700;
     letter-spacing: 0.5px;
