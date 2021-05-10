@@ -3,14 +3,15 @@ import {AppRootStateType} from "../store";
 import {loginAPI} from "../../api/loginAPI";
 
 
-const initialState: InitialSetNewPassType = {
+const initialState: InitialForgotStateType = {
     info: "",
     requestStatus: 'idle',
     error: ''
 }
 
 
-export const passwordReducer = (state = initialState, action: passwordActionsThunk): InitialSetNewPassType => {
+
+export const forgotReducer = (state = initialState, action: ForgotPassActionsType): InitialForgotStateType => {
     switch (action.type) {
         case 'SET_REQUEST_STATUS': {
             return {
@@ -43,18 +44,18 @@ export const passwordReducer = (state = initialState, action: passwordActionsThu
 
 
 //actions
-const setInfoAC = (info: string) => ({type: 'SET_INFO', info} as const)
+const setInfoAC = (info: string) => ({type: 'SET_INFO',  info} as const)
 const setErrorAC = (error: string) => ({type: 'SET_ERROR', error} as const)
 const setRequestStatusAC = (requestStatus: string) => ({type: 'SET_REQUEST_STATUS', requestStatus} as const)
 
 //thunks
-export const passwordThunk = (password: string, resetPasswordToken: string | undefined): ThunkType => (dispatch: DispatchType) => {
+export const forgotPassThunk = (email: string): ThunkType => (dispatch: DispatchType) => {
     dispatch(setRequestStatusAC('loading'))
-    loginAPI.setNewPassword({password, resetPasswordToken})
+     loginAPI.forgotPass(email)
         .then(response => {
-            dispatch(setInfoAC(response.data.info))
-            dispatch(setRequestStatusAC('failed'))
-        })
+                dispatch(setInfoAC(response.data.info))
+                dispatch(setRequestStatusAC('failed'))
+            })
         .catch(e => {
             const error = e.response
                 ? e.response.data.error
@@ -65,16 +66,17 @@ export const passwordThunk = (password: string, resetPasswordToken: string | und
 }
 
 
+
 //types
-export type InitialSetNewPassType = {
+export type InitialForgotStateType = {
     info: string
     requestStatus: string
     error: string
 }
-export type passwordActionsThunk = ReturnType<typeof setInfoAC>
+export type ForgotPassActionsType = ReturnType<typeof setInfoAC>
     | ReturnType<typeof setRequestStatusAC>
     | ReturnType<typeof setErrorAC>
 
 
-type DispatchType = ThunkDispatch<AppRootStateType, unknown, passwordActionsThunk>
-type ThunkType = ThunkAction<void, AppRootStateType, unknown, passwordActionsThunk>
+type DispatchType = ThunkDispatch<AppRootStateType, unknown, ForgotPassActionsType>
+type ThunkType = ThunkAction<void, AppRootStateType, unknown, ForgotPassActionsType>

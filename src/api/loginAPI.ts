@@ -9,25 +9,27 @@ const settings = {
 const instance = axios.create(settings)
 
 export const loginAPI = {
-    registration: (data: {email: string, password: string}) => {
+    registration: (data: { email: string, password: string }) => {
         return instance.post<RegistrationResponseType>('auth/register', data)
     },
     logout: () => {
         return instance.delete<MultiResponseType>('auth/me')
     },
-    fetchLoginData: (data: {email: string, password: string, rememberMe: boolean}) => {
+    fetchLoginData: (data: { email: string, password: string, rememberMe: boolean }) => {
         return instance.post<LoginResponseType>('auth/login', data)
     },
     forgotPass: (email: string) => {
-        return instance.post<ForgotType>(`auth/forgot`, {email,
+        return instance.post<MultiResponseType>(`auth/forgot`, {
+            email,
             from: "test-front-admin <ai73a@yandex.by>",
             message: `<div style="background-color: lime; padding: 15px">
                  password recovery link:
-                 <a href='http://marygrishchuk.github.io/cards-by-dream-team/#/set-new-password/$token$'>
-                 Reset Password</a></div>`})
+                <a href='http://localhost:3000/#/set-new-password/$token$'>
+                 Reset Password</a></div>`
+        })
     },
-    setNewPassword: (data: {password: string, resetPasswordToken: string}) => {
-        return instance.post<MultiResponseType>('auth/set-new-password', data)
+    setNewPassword: (newPassData: NewPassDataType) => {
+        return instance.post<MultiResponseType>('auth/set-new-password', newPassData)
     }
 }
 
@@ -45,17 +47,17 @@ export type RegistrationResponseType = {
 }
 
 export type LoginResponseType = {
-    _id: string;	
-    email: string;	
-    name: string;	
-    avatar?: string;	
+    _id: string;
+    email: string;
+    name: string;
+    avatar?: string;
     publicCardPacksCount: number; // количество колод
-    created: Date; 	
-    updated: Date;	
-    isAdmin: boolean;	
+    created: Date;
+    updated: Date;
+    isAdmin: boolean;
     verified: boolean; // подтвердил ли почту	
-    rememberMe: boolean;	      
-    error?: string;	
+    rememberMe: boolean;
+    error?: string;
 }
 
 export type MultiResponseType = {
@@ -68,8 +70,8 @@ export type UpdateProfileResponseType = {
     error?: string
 }
 
-
-export type ForgotType = {
-    info: string
-    error?: string
+export type NewPassDataType = {
+    password: string
+    resetPasswordToken: string | undefined
 }
+
