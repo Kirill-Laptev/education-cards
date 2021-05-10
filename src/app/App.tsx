@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../features/login/Login';
 import Registration from '../features/registration/Registration'
 import Header from '../components/Header/Header';
+import Profile from '../features/profile/Profile';
 // import ForgotPasswordForm from "../features/forgot-password/ForgotPasswordForm";
 
 const App = () => {
@@ -15,7 +16,7 @@ const App = () => {
         <Switch>
           <Route path='/login' render={() => <Login />}/>
           <Route path='/registration' render={() => <Registration />}/>
-          <Route path='/profile' render={() => <div>Profile will be here</div>}/>
+          <Route path='/profile' render={() => <Profile />}/>
           {/* <Route path='/forgotpassword' render={() => <div><ForgotPasswordForm/></div>}/> */}
           <Route path='/newpassword' render={() => <div>Change password will be here</div>}/>      
           <Route path='/test' render={() => <div>View custom components will be here</div>}/>      

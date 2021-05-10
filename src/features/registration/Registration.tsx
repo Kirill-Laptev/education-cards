@@ -36,6 +36,7 @@ const Registration: React.FC = () => {
 
     const isRegisterSuccess = useSelector<AppRootStateType, boolean>((state) => state.registration.isRegisterSuccess)
     const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.registration.error)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
 
     useEffect(() => {
         if(isRegisterSuccess) {
@@ -44,6 +45,11 @@ const Registration: React.FC = () => {
             }, 3000)
         }    
     }, [isRegisterSuccess])
+
+
+    if(isLoggedIn){
+        return <Redirect to='/profile'/>
+    }
 
 
     const emailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

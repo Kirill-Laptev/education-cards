@@ -11,7 +11,7 @@ const initialState: InitialStateType = {
 export const loginReducer = (state: InitialStateType = initialState, action: LoginActionsType) => {
     switch(action.type){
 
-        case 'SET_USER_DATA':
+        case 'SET_IS_LOGGED_IN':
             return {
                 ...state,
                 isLoggedIn: action.isLoggedIn
@@ -30,7 +30,7 @@ export const loginReducer = (state: InitialStateType = initialState, action: Log
 
 
 // actions
-export const setIsLoggedIn = (isLoggedIn: boolean) => ({type: 'SET_USER_DATA', isLoggedIn} as const)
+export const setIsLoggedIn = (isLoggedIn: boolean) => ({type: 'SET_IS_LOGGED_IN', isLoggedIn} as const)
 export const setErrorMessage = (errorMessage: string) => ({type: 'SET_ERROR_MESSAGE', errorMessage} as const)
 
 
@@ -41,6 +41,19 @@ export const loginTC = (formData: {email: string, password: string, rememberMe: 
             const {data} = await loginAPI.fetchLoginData(formData)
             dispatch(setUserDataAC(data))
             dispatch(setIsLoggedIn(true))
+        }
+        catch(e){
+            dispatch(setErrorMessage(e.response ? e.response.data.error : e.message))
+            dispatch(setErrorMessage(''))
+        }
+    }
+}
+
+export const logoutTC = (): ThunkType => {
+    return async (dispatch: DispatchType) => {
+        try{
+            await loginAPI.logout()
+            dispatch(setIsLoggedIn(false))
         }
         catch(e){
             dispatch(setErrorMessage(e.response ? e.response.data.error : e.message))
