@@ -6,6 +6,7 @@ import {AppRootStateType} from "../../redux/store";
 import s from "../forgot-password/ForgotPassword.module.css";
 import {TextError} from "../../helpers/TextError";
 import forgot from "../../assets/img/key.svg";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 
 const ForgotPasswordForm = () => {
@@ -14,7 +15,7 @@ const ForgotPasswordForm = () => {
     const [emailTouched, setEmailTouched] = useState<boolean>(false)
     const [emailError, setEmailError] = useState<string>('Email field is required')
     const [isFormValid, setIsFormValid] = useState<boolean>(false)
-    const {requestStatus, info} = useSelector<AppRootStateType, InitialForgotStateType>((state) => state.forgot)
+    const {requestStatus, info, error} = useSelector<AppRootStateType, InitialForgotStateType>((state) => state.forgot)
 
     const dispatch = useDispatch()
 
@@ -80,7 +81,7 @@ const ForgotPasswordForm = () => {
                     </form>
                 </div>
             </div>
-            {/*<AlertPopup message={serverErrorMessage} isRegisterSuccess={isRegisterSuccess}/>*/}
+            <AlertPopup message={error} />
         </>
 
     )
