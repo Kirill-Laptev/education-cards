@@ -2,13 +2,16 @@ import axios from 'axios'
 
 const settings = {
     // baseURL: "http://localhost:7542/2.0/",
-    baseURL: "https://neko-back.herokuapp.com/2.0",
+    baseURL: "https://neko-back.herokuapp.com/2.0/",
     withCredentials: true
 }
 
 const instance = axios.create(settings)
 
 export const loginAPI = {
+    authMe: () => {
+        return instance.post<AuthResponseType>('auth/me')
+    },
     registration: (data: { email: string, password: string }) => {
         return instance.post<RegistrationResponseType>('auth/register', data)
     },
@@ -16,10 +19,10 @@ export const loginAPI = {
         return instance.delete<MultiResponseType>('auth/me')
     },
     fetchLoginData: (data: { email: string, password: string, rememberMe: boolean }) => {
-        return instance.post<LoginResponseType>('auth/login', data)
+        return instance.post<AuthResponseType>('auth/login', data)
     },
     forgotPass: (email: string) => {
-        return instance.post<MultiResponseType>(`auth/forgot`, {
+        return instance.post<MultiResponseType>('auth/forgot', {
             email,
             from: "test-front-admin <ai73a@yandex.by>",
             message: `<div style="background-color: lime; padding: 15px">
@@ -46,7 +49,7 @@ export type RegistrationResponseType = {
     error?: string
 }
 
-export type LoginResponseType = {
+export type AuthResponseType = {
     _id: string;
     email: string;
     name: string;

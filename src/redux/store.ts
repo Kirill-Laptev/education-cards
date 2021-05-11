@@ -1,18 +1,19 @@
-import { passwordReducer } from './password-reducer/password-reducer';
+import { appReducer, AppActionsType } from './app-reducer/app-reducer';
+import { passwordReducer, PasswordActionsType } from './password-reducer/password-reducer';
 import { profileReducer, ProfileActionsType } from './profile-reducer/profile-reducer';
-import { registrationReducer } from './registration-reducer/registration-reducer';
+import { registrationReducer, RegistrationActionsType } from './registration-reducer/registration-reducer';
 import { loginReducer, LoginActionsType } from './login-reducer/login-reducer';
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import thunkMiddleware from 'redux-thunk'
-import {forgotReducer} from "./forgot-reducer/forgot-reducer";
-// import {ForgotPassActionsType, forgotReducer} from "./forgot-reducer/forgot-reducer";
+import {ForgotPassActionsType, forgotReducer} from "./forgot-reducer/forgot-reducer";
 
 const rootReducer = combineReducers({
     login: loginReducer,
     registration: registrationReducer,
     profile: profileReducer,
     password: passwordReducer,
-    forgot: forgotReducer
+    forgot: forgotReducer,
+    app: appReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
@@ -22,7 +23,11 @@ export type AppRootStateType = ReturnType<typeof rootReducer>
 export type AllAppActionsType = 
 | LoginActionsType
 | ProfileActionsType
-// | ForgotPassActionsType
+| RegistrationActionsType
+| ForgotPassActionsType
+| PasswordActionsType
+| AppActionsType
+
 
 // @ts-ignore
 window.store = store

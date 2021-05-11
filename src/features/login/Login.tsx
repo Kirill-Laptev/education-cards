@@ -1,12 +1,13 @@
 import React, { useState, FocusEvent, useEffect } from 'react'
 import enterImg from '../../assets/img/enter.svg'
 import s from './Login.module.css'
-import { NavLink, Redirect } from 'react-router-dom'
+import { NavLink, Redirect, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginTC } from '../../redux/login-reducer/login-reducer'
 import { AppRootStateType } from '../../redux/store'
 import { TextError } from '../../helpers/TextError'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
+import { validateEmail } from '../../helpers/validators/validators'
 
 
 const LoginForm: React.FC = () => {
@@ -20,6 +21,11 @@ const LoginForm: React.FC = () => {
     const [passwordError, setPasswordError] = useState<string>('Password is required')
     const [isFormValid, setIsFormValid] = useState<boolean>(false)
 
+    const dispatch = useDispatch()
+
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
+    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.login.error)
+
     useEffect(() => {
         if(emailError || passwordError){
             setIsFormValid(false)
@@ -28,21 +34,15 @@ const LoginForm: React.FC = () => {
         }
     }, [emailError, passwordError])
 
-
-    const dispatch = useDispatch()
-
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
-    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.login.error)
-
-    if(isLoggedIn) {
-        return <Redirect to='/profile' />
+    if(isLoggedIn){
+        return <Redirect to='/profile'/>
     }
-
 
     const emailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(!re.test(String(e.currentTarget.value).toLowerCase())){
+
+        const isValidEmail = validateEmail(e.currentTarget.value)
+        if (isValidEmail) {
             setEmailError('Incorrect email format')
             if(!e.currentTarget.value){
                 setEmailError('Email field is required')
@@ -129,7 +129,7 @@ const LoginForm: React.FC = () => {
                     </form>
                 </div>
             </div>
-            <AlertPopup message={serverErrorMessage}/>
+            <AlertPopup message={serverErrorMessage} serverRequestSuccess={isLoggedIn}/>
         </>
     )
 }

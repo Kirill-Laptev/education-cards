@@ -1,12 +1,13 @@
 import React, {FocusEvent, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {Redirect} from 'react-router-dom';
-import {forgotPassThunk, InitialForgotStateType} from '../../redux/forgot-reducer/forgot-reducer';
+import {Redirect, useHistory} from 'react-router-dom';
+import {forgotPassTC, setInfoAC} from '../../redux/forgot-reducer/forgot-reducer';
 import {AppRootStateType} from "../../redux/store";
 import s from "../forgot-password/ForgotPassword.module.css";
 import {TextError} from "../../helpers/TextError";
 import forgot from "../../assets/img/key.svg";
-import AlertPopup from "../../components/AlertPopup/AlertPopup";
+import AlertPopup from '../../components/AlertPopup/AlertPopup';
+import { validateEmail } from '../../helpers/validators/validators';
 
 
 const ForgotPasswordForm = () => {
@@ -15,19 +16,47 @@ const ForgotPasswordForm = () => {
     const [emailTouched, setEmailTouched] = useState<boolean>(false)
     const [emailError, setEmailError] = useState<string>('Email field is required')
     const [isFormValid, setIsFormValid] = useState<boolean>(false)
-    const {requestStatus, info, error} = useSelector<AppRootStateType, InitialForgotStateType>((state) => state.forgot)
+
+    const sendMessageSuccess = useSelector<AppRootStateType, string>((state) => state.forgot.info)
+    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.forgot.error)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
 
     const dispatch = useDispatch()
+    const history = useHistory()
+
+    useEffect(() => {
+        if (emailError) {
+            setIsFormValid(false)
+        } else{
+            setIsFormValid(true)
+        }
+    }, [emailError])
+
+    useEffect(() => {
+        if(sendMessageSuccess){
+            setTimeout(() => {
+                history.push('/login')
+                dispatch(setInfoAC(''))
+            }, 3000)
+        }    
+    }, [sendMessageSuccess])
+
+    
+    if(isLoggedIn){
+        return <Redirect to='/profile'/>
+    }
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        dispatch(forgotPassThunk(email))
+        dispatch(forgotPassTC(email))
     }
 
     const emailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(String(e.currentTarget.value).toLowerCase())) {
+        
+        const isValidEmail = validateEmail(e.currentTarget.value)
+        if (isValidEmail) {
             setEmailError('Incorrect email format')
             if (!e.currentTarget.value) {
                 setEmailError('Email field is required')
@@ -42,17 +71,7 @@ const ForgotPasswordForm = () => {
             setEmailTouched(true)
         }
     }
-
-    useEffect(() => {
-        if (emailError) {
-            setIsFormValid(false)
-        }
-        setIsFormValid(true)
-    }, [emailError])
-
-    if (requestStatus && info) {
-        return <Redirect to='/profile'/>
-    }
+    
 
     return (
         <>
@@ -65,7 +84,6 @@ const ForgotPasswordForm = () => {
                     <form onSubmit={handleSubmit}>
                         <div className={s.form__email}>
                             <div><label htmlFor='email'>Enter valid email</label></div>
-
                             <input
                                 type='text'
                                 id='email'
@@ -81,7 +99,9 @@ const ForgotPasswordForm = () => {
                     </form>
                 </div>
             </div>
-            <AlertPopup message={error} />
+            <AlertPopup message={serverErrorMessage} serverRequestSuccess={sendMessageSuccess}/>
+            {/* Email address not found /ᐠ-ꞈ-ᐟ\\ */}
+            {/* sent —ฅ/ᐠ.̫ .ᐟ\\ฅ— */}
         </>
 
     )

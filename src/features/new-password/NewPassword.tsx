@@ -1,15 +1,15 @@
 import React, {FocusEvent, useEffect, useState} from 'react'
 import s from './NewPassword.module.css'
-import {useHistory, useParams} from 'react-router-dom'
+import {useHistory, useParams, Redirect} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from '../../redux/store'
 import {TextError} from '../../helpers/TextError'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
-import {passwordThunk} from "../../redux/password-reducer/password-reducer";
+import {newPasswordTC} from "../../redux/password-reducer/password-reducer";
 import resetImg from './../../../src/assets/img/rotation-lock.svg'
+import { setInfoAC } from '../../redux/forgot-reducer/forgot-reducer'
 
 const NewPassword: React.FC = () => {
-
 
     const [password, setPassword] = useState<string>('')
     const [passwordConfirm, setPasswordConfirm] = useState<string>('')
@@ -20,6 +20,13 @@ const NewPassword: React.FC = () => {
     const [isFormValid, setIsFormValid] = useState<boolean>(false)
     const {token} = useParams<{ token?: string }>()
 
+    const changePasswordSuccess = useSelector<AppRootStateType, string>((state) => state.password.info)
+    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.password.error)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
+
+    const dispatch = useDispatch()
+    const history = useHistory()
+
     useEffect(() => {
         if (passwordError || passwordConfirmError) {
             setIsFormValid(false)
@@ -29,19 +36,19 @@ const NewPassword: React.FC = () => {
     }, [passwordError, passwordConfirmError])
 
 
-    const dispatch = useDispatch()
-    const history = useHistory()
-
-    const isRegisterSuccess = useSelector<AppRootStateType, boolean>((state) => state.registration.isRegisterSuccess)
-    const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.registration.error)
-
     useEffect(() => {
-        if (isRegisterSuccess) {
+        if (changePasswordSuccess) {
             setTimeout(() => {
                 history.push('/login')
+                dispatch(setInfoAC(''))
             }, 3000)
         }
-    }, [isRegisterSuccess])
+    }, [changePasswordSuccess])
+
+
+    if(isLoggedIn){
+        return <Redirect to='/profile'/>
+    }
 
 
     const passwordValidation = (password: string, setState: Function, setError: Function) => {
@@ -81,7 +88,7 @@ const NewPassword: React.FC = () => {
         if (password !== passwordConfirm) {
             setPasswordConfirmError('Different passwords')
         } else {
-            dispatch(passwordThunk(password, token))
+            dispatch(newPasswordTC(password, token))
         }
     }
 
@@ -124,7 +131,7 @@ const NewPassword: React.FC = () => {
                     </form>
                 </div>
             </div>
-            <AlertPopup message={serverErrorMessage} isRegisterSuccess={isRegisterSuccess}/>
+            <AlertPopup message={serverErrorMessage} serverRequestSuccess={changePasswordSuccess}/>   
         </>
     )
 }

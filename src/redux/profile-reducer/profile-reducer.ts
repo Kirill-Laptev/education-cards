@@ -1,6 +1,6 @@
-import { LoginResponseType } from './../../api/loginAPI';
+import { AuthResponseType } from './../../api/loginAPI';
 
-const initialState: LoginResponseType | {} = {}
+const initialState: AuthResponseType | {} = {}
 
 export const profileReducer = (state = initialState, action: ProfileActionsType) => {
     switch(action.type){
@@ -16,7 +16,7 @@ export const profileReducer = (state = initialState, action: ProfileActionsType)
     }
 }
 
-export const setUserDataAC = (userData: LoginResponseType) => ({type: 'SET_USER_PROFILE', userData} as const)
+export const setUserDataAC = (userData: AuthResponseType) => ({type: 'SET_USER_PROFILE', userData} as const)
 
 
 // types 

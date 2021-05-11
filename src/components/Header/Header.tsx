@@ -1,15 +1,21 @@
 import React from 'react'
 import s from './Header.module.css'
-import { NavLink } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { NavLink, Redirect } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { logoutTC } from '../../redux/login-reducer/login-reducer'
+import { AppRootStateType } from '../../redux/store'
 
 const Header = () => {
 
+    const isLoggedIn = useSelector<AppRootStateType>((state) => state.login.isLoggedIn)
     const dispatch = useDispatch()
 
     const logout = () => {
         dispatch(logoutTC())
+    }
+
+    const login = () => {
+        return <Redirect to='/login'/>
     }
 
     return (
@@ -24,7 +30,10 @@ const Header = () => {
                     <NavLink to='/forgotpassword'>Forgot Password</NavLink>
                     <NavLink to='/test'>Test</NavLink>
                 </div>
-                <div className={s.header__logout}><button onClick={logout}>Log out</button></div>
+                {isLoggedIn
+                  ? <div className={s.header__btns}><button onClick={logout}>Log out</button></div>
+                  : <div className={s.header__btns}><button onClick={login}>Login</button></div>}
+                
             </div>
         </div>
     )
