@@ -1,9 +1,9 @@
 import { setIsLoggedInAC, SetIsLoggedInActionType } from './../login-reducer/login-reducer';
-import { SetUserDataActionType } from './../profile-reducer/profile-reducer';
+import {setUserDataAC, SetUserDataActionType} from './../profile-reducer/profile-reducer';
 import { loginAPI } from './../../api/loginAPI';
 import { AppRootStateType } from './../store';
 import { ThunkDispatch, ThunkAction } from "redux-thunk"
-import { setUserDataAC } from '../profile-reducer/profile-reducer';
+
 
 const initialState: InitialStateType = {
     isAppInicialized: false,
