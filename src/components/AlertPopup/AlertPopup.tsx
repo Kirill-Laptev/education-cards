@@ -9,14 +9,17 @@ const AlertPopup: React.FC<ErrorPopupPropsType> = ({message, serverRequestSucces
         if(message === 'not correct password /ᐠ-ꞈ-ᐟ\\') return 'not correct password'
         if(message === 'not valid email/password /ᐠ-ꞈ-ᐟ\\') return 'not valid email/password'
         if(message === 'email already exists /ᐠ｡ꞈ｡ᐟ\\') return 'that username is taken'
-        if(message === 'Email address not found /ᐠ-ꞈ-ᐟ\\') return 'Email adress not found'
-        if(message === 'no resetPasswordToken, Check your request! /ᐠ-ꞈ-ᐟ\\') return 'Please check your email and click on recovery link'
+        if(message === 'Email address not found /ᐠ-ꞈ-ᐟ\\') return 'email adress not found'
+        if(message === 'no resetPasswordToken, Check your request! /ᐠ-ꞈ-ᐟ\\') return 'please check your email and click on recovery link'
+        if(message === 'not your CardsPack! /ᐠ｡ꞈ｡ᐟ\\') return 'not your cards pack'
         return 'server error'
     }
+
 
     // Без useEffect попап всплывает 2 раза
     useEffect(() => {
         if(message){
+            debugger
             toast(viewMessage().toUpperCase())
         }
         if(serverRequestSuccess){

@@ -1,29 +1,29 @@
+import { PacksType, NewPackResponseType } from './../../api/loginAPI';
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AppRootStateType} from "../store";
-import {PacksAPI} from "../../api/loginAPI";
+import {packsAPI} from "../../api/loginAPI";
+
 
 const initialState: InitialState = {
     cardPacks: [],
     cardPacksTotalCount: 0,
-    name: '',
-    type: 'Cards'
-
+    error: ''
 }
 
 export const packsReducer = (state = initialState, action: PacksActionsType): InitialState => {
     switch (action.type) {
 
-        case 'packs/GET_PACKS':
+        case 'packs/SET_PACKS':
             return {
                 ...state,
-                cardPacks: action.cardPacks,
+                cardPacks: action.packs,
                 cardPacksTotalCount: action.cardPacksTotalCount
             }
 
-        case 'packs/SET_NAME_PACK':
+        case 'packs/SET_ERROR_MESSAGE':
             return {
                 ...state,
-                name: action.name
+                error: action.errorMessage
             }
 
         default:
@@ -33,34 +33,35 @@ export const packsReducer = (state = initialState, action: PacksActionsType): In
 
 
 //actions
-export const getCardsAC = (cardPacks: Array<CardsType>, cardPacksTotalCount: number) => ({
-    type: 'packs/GET_PACKS',
-    cardPacks,
-    cardPacksTotalCount
-} as const)
+export const setPacksAC = (packs: Array<PacksType>, cardPacksTotalCount: number) => {
+    return {type: 'packs/SET_PACKS' as const, packs, cardPacksTotalCount}
+} 
+
+const setErrorMessageAC = (errorMessage: string) => ({type: 'packs/SET_ERROR_MESSAGE', errorMessage} as const)
+
 export const setNameAC = (name: string) => ({type: 'packs/SET_NAME_PACK', name} as const)
 
 //thunks
-export const getPacksTC = (packName: string, min: number, max: number, sortPacks: string, page: number, pageCount: number, userId: string): ThunkType => {
+export const getPacksTC = (): ThunkType => {
     return async (dispatch: DispatchType) => {
         try {
-            const res = await PacksAPI.getPacks(packName, min, max, sortPacks, page, pageCount, userId)
-            dispatch(getCardsAC(res.data.cardPacks, res.data.cardsCount))
+            const res = await packsAPI.getPacks()
+            dispatch(setPacksAC(res.data.cardPacks, res.data.cardPacksTotalCount))
         } catch (e) {
-            //Уточнить
+            dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
+            dispatch(setErrorMessageAC(''))
         }
     }
 }
 
-export const addPackTC = (name: string, path: string, grade: number, shots: number, rating: number,
-                          deckCover: string, privat?: boolean, type?: string): ThunkType => {
+export const addNewPackTC = (): ThunkType => {
     return async (dispatch: DispatchType) => {
         try {
-            const res = await PacksAPI.addPack(name, path, grade, shots, rating,
-                deckCover, privat, type)
-            console.log(res.data)
+            await packsAPI.addPack()
+            dispatch(getPacksTC())
         } catch (e) {
-            //Уточнить
+            dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
+            dispatch(setErrorMessageAC(''))
         }
     }
 }
@@ -68,21 +69,23 @@ export const addPackTC = (name: string, path: string, grade: number, shots: numb
 export const deletePackTC = (id: string): ThunkType => {
     return async (dispatch: DispatchType) => {
         try {
-            const res = await PacksAPI.deletePack(id)
-            console.log(res.data)
+            await packsAPI.deletePack(id)
+            dispatch(getPacksTC())
         } catch (e) {
-            //Уточнить
+            dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
+            dispatch(setErrorMessageAC(''))
         }
     }
 }
 
-export const UpdatePackTC = (id: string, name: string): ThunkType => {
+export const UpdatePackTC = (_id: string): ThunkType => {
     return async (dispatch: DispatchType) => {
         try {
-            const res = await PacksAPI.addPack(id, name)
-            console.log(res.data)
+            await packsAPI.updatePack(_id)
+            dispatch(getPacksTC())
         } catch (e) {
-            //Уточнить
+            dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
+            dispatch(setErrorMessageAC(''))
         }
     }
 }
@@ -91,32 +94,32 @@ export const UpdatePackTC = (id: string, name: string): ThunkType => {
 
 //types
 type InitialState = {
-    cardPacks: Array<CardsType>
+    cardPacks: Array<PacksType>
     cardPacksTotalCount: number
-    name: string
-    type: string
+    error: string
 }
+
 export type PacksActionsType =
-    | ReturnType<typeof getCardsAC>
-    | ReturnType<typeof setNameAC>
+| ReturnType<typeof setPacksAC>
+| ReturnType<typeof setErrorMessageAC>
 
 type DispatchType = ThunkDispatch<AppRootStateType, unknown, PacksActionsType>
 type ThunkType = ThunkAction<void, AppRootStateType, unknown, PacksActionsType>
 
 
-type CardsType = {
-    cardsCount: number
-    created: string
-    deckCover: null
-    grade: number
-    more_id: string
-    name: string
-    path: string
-    private: boolean
-    rating: number
-    shots: number
-    type: string
-    updated: string
-    user_id: string
-    user_name: string
-}
+// type CardsType = {
+//     cardsCount: number
+//     created: string
+//     deckCover: null
+//     grade: number
+//     more_id: string
+//     name: string
+//     path: string
+//     private: boolean
+//     rating: number
+//     shots: number
+//     type: string
+//     updated: string
+//     user_id: string
+//     user_name: string
+// }

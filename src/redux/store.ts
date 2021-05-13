@@ -6,6 +6,7 @@ import { loginReducer, LoginActionsType } from './login-reducer/login-reducer';
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import thunkMiddleware from 'redux-thunk'
 import {ForgotPassActionsType, forgotReducer} from "./forgot-reducer/forgot-reducer";
+import { packsReducer } from './packs-reducer/packs-reducer';
 
 const rootReducer = combineReducers({
     login: loginReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     profile: profileReducer,
     password: passwordReducer,
     forgot: forgotReducer,
-    app: appReducer
+    app: appReducer,
+    packs: packsReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))

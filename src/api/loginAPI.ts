@@ -37,24 +37,22 @@ export const loginAPI = {
 }
 
 
-export const PacksAPI = {
-    getPacks: (packName?: string, min?: number, max?: number, sortPacks?: string,
-               page?: number, pageCount?: number, userId?: string) => {
-        return instance.get(`cards/pack?packName=${packName}&min=${min}&max=${max}&sortPacks=${sortPacks}&page=${page}&pageCount=${pageCount}&userId=${userId}`)
+export const packsAPI = {
+    getPacks: (countItems: number = 100) => {
+        return instance.get<PacksResponseType>(`cards/pack?pageCount=${countItems}`)
     },
-    addPack: (name?: string, path?: string, grade?: number, shots?: number, rating?: number,
-              deckCover?: string, privat?: boolean, type?: string) => {
-        return instance.post(`cards/pack`, {name, path, grade, shots, rating, deckCover, privat, type})
+    addPack: (title: string = "yo it's my pack") => {
+        return instance.post<NewPackResponseType>(`cards/pack`, {cardsPack: {name: title} })
     },
     deletePack: (id: string) => {
         return instance.delete(`cards/pack?id=${id}`)
     },
-    updatePack: (id: string, name: string) => {
-        return instance.put(`cards/pack`, {cardsPack: {id, name}})
+    updatePack: (_id: string, name: string = "yo it's my updated pack") => {
+        return instance.put('cards/pack', {cardsPack: {_id, name}})
     }
 }
 
-export const CardsAPI = {
+export const cardsAPI = {
     getCards: (cardPackId: string, cardQuestion: string, cardAnswer: string, min?: number, max?: number, sortCards?: string,
                page?: number, pageCount?: number) => {
         return instance.get(`cards/card?pageCount=10&cardsPack_id=${cardPackId}
@@ -131,4 +129,48 @@ export type UpdateCardType = {
     _id: string
     question: string
     comments: string
+}
+
+export type PacksResponseType = {
+    cardPacks: Array<PacksType>					
+    cardPacksTotalCount: number		
+    maxCardsCount: number			
+    minCardsCount: number			
+    page: number			
+    pageCount: number		
+}
+
+export type PacksType = {
+    _id: string		
+    user_id: string			
+    name: string			
+    path: string				
+    cardsCount: 25			
+    grade: number		
+    shots: number
+    rating: number
+    type: string	
+    created: string				
+    updated: string			
+    __v: number			
+}
+
+export type NewPackResponseType = {
+    cardsCount: number                         
+    created: string
+    grade: number 
+    more_id: string
+    name: string
+    path: string
+    private: boolean
+    rating: number 
+    shots: number 
+    type: string
+    updated: string
+    user_id: string
+    user_name: string
+    __v: number 
+    _id: string
+    token: string
+    tokenDeathTime: number 
 }

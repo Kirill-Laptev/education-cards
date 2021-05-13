@@ -42,7 +42,7 @@ export const appInicializeTC = (): ThunkType => {
             dispatch(setUserDataAC(res.data))
             dispatch(setIsLoggedInAC(true))
         } catch(e){
-            dispatch(setErrorMessageAC('АВТОРИЗУЙТЕСЬ!'))  // Исправить !
+            dispatch(setErrorMessageAC('Please, authorized'))  
         } finally{
             dispatch(setAppInicializedAC(true))
         }
