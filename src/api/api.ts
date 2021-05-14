@@ -47,13 +47,13 @@ export const packsAPI = {
     //     return instance.get<PacksResponseType>(`cards/pack?packName=${packName}&sortPacks=${sortPacks}&min=${min}&max=${max}&page=${page}&pageCount=${pageCount}&user_id=${userId}`)
     // },
     addPack: (title: string) => {
-        return instance.post<NewPackResponseType>(`cards/pack`, {cardsPack: {name: title} })
+        return instance.post<OnPackActionResponseType>(`cards/pack`, {cardsPack: {name: title} })
     },
     deletePack: (id: string) => {
-        return instance.delete(`cards/pack?id=${id}`)
+        return instance.delete<OnPackActionResponseType>(`cards/pack?id=${id}`)
     },
     updatePack: (_id: string, name: string) => {
-        return instance.put('cards/pack', {cardsPack: {_id, name}})
+        return instance.put<PacksResponseType>('cards/pack', {cardsPack: {_id, name}})
     }
 }
 
@@ -118,25 +118,25 @@ export type NewPassDataType = {
     resetPasswordToken: string | undefined
 }
 
-export type CardsType = {
-    cardsPack_id: string,
-    question?: string,
-    answer?: string,
-    grade?: number,
-    shots?: number,
-    rating?: number,
-    answerImg?: string,
-    questionImg?: string,
-    questionVideo?: string,
-    answerVideo?: string,
-    type?: string
-}
+// export type CardsType = {
+//     cardsPack_id: string,
+//     question?: string,
+//     answer?: string,
+//     grade?: number,
+//     shots?: number,
+//     rating?: number,
+//     answerImg?: string,
+//     questionImg?: string,
+//     questionVideo?: string,
+//     answerVideo?: string,
+//     type?: string
+// }
 
-export type UpdateCardType = {
-    _id: string
-    question: string
-    comments: string
-}
+// export type UpdateCardType = {
+//     _id: string
+//     question: string
+//     comments: string
+// }
 
 export type PacksResponseType = {
     cardPacks: Array<PacksType>					
@@ -164,22 +164,24 @@ export type PacksType = {
     __v: number			
 }
 
-export type NewPackResponseType = {
-    cardsCount: number                         
-    created: string
-    grade: number 
-    more_id: string
-    name: string
-    path: string
-    private: boolean
-    rating: number 
-    shots: number 
-    type: string
-    updated: string
-    user_id: string
-    user_name: string
-    __v: number 
-    _id: string
+export type OnPackActionResponseType = {
+    newCardsPack: {
+        cardsCount: number                         
+        created: string
+        grade: number 
+        more_id: string
+        name: string
+        path: string
+        private: boolean
+        rating: number 
+        shots: number 
+        type: string
+        updated: string
+        user_id: string
+        user_name: string
+        __v: number 
+        _id: string
+    }   
     token: string
     tokenDeathTime: number 
 }

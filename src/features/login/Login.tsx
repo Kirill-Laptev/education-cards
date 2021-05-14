@@ -12,8 +12,8 @@ import { validateEmail } from '../../helpers/validators/validators'
 
 const LoginForm: React.FC = () => {
 
-    const [email, setEmail] = useState<string>('example555@gmail.com')
-    const [password, setPassword] = useState<string>('Samurai9090')
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
     const [rememberMe, setRememberMe] = useState<boolean>(false)
     const [emailTouched, setEmailTouched] = useState<boolean>(false)
     const [passwordTouched, setPasswordTouched] = useState<boolean>(false)

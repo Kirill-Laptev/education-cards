@@ -36,9 +36,10 @@ const App = () => {
               <Route path='/login' render={() => <Login />}/>
               <Route path='/registration' render={() => <Registration />}/>
               <Route path='/profile' render={() => <Profile />}/>
-                <Route path='/forgotpassword' render={() => <div><ForgotPasswordForm/></div>}/>
+              <Route path='/forgotpassword' render={() => <div><ForgotPasswordForm/></div>}/>
               <Route path='/newpassword' render={() => <div><NewPassword/></div>}/>
-              <Route path='/test' render={() => <Packs />}/>      
+              <Route path='/packs' render={() => <Packs />}/>      
+              <Route path='/' render={() => <Profile />}/>  
               <Route path='*' render={() => <div>404 Not Found</div>}/>    
             </Switch>     
           </div>
