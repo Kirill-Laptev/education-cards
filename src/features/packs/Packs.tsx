@@ -8,20 +8,23 @@ import { PacksType } from '../../api/api'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
 import { Redirect } from 'react-router-dom'
 import { SortRoute } from '../../helpers/enum'
+import Paginator from '../../components/Paginator/Paginator'
 
 
 const Packs = () => {
 
-    const [searchName, setSearchName] = useState<string>('')
-
     const dispatch = useDispatch()
 
-    const responseData = useSelector<AppRootStateType, PacksType[]>((state) => state.packs.cardPacks)
+    const [searchName, setSearchName] = useState<string>('')
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const responseData = useSelector<AppRootStateType, PacksType[]>((state) => state.packs.packs)
     const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.packs.error)
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
     const requestParams = useSelector<AppRootStateType, GetPacksRequestType>((state) => state.packs.requestParams) 
-    // const token = useSelector<AppRootStateType, string>((state) => state.profile.token)
-    const userId = useSelector<AppRootStateType, string>((state) => state.profile._id)
+    const packsTotalCount = useSelector<AppRootStateType, number>((state) => state.packs.packsTotalCount)
+    const itemsOnPage = useSelector<AppRootStateType, number>((state) => state.packs.requestParams.pageCount!)
+    
 
     const columnsNames: Column<PacksType>[] = [  
         {
@@ -57,21 +60,22 @@ const Packs = () => {
     const columns = React.useMemo(() => columnsNames, [])
     const data = React.useMemo(() => responseData, [responseData])
 
-    const tableInstance = useTable({
-        columns,
-        data,
-      })
-
-    const { 
+    const {
         getTableProps,
         getTableBodyProps, 
         headerGroups, 
         rows, 
         prepareRow 
-    } = tableInstance
+        } = useTable(
+            {
+            columns,
+            data,
+        }
+      )
+
 
     const onAddNewPack = () => {
-        dispatch(addNewPackTC('New title', {sortPacks: SortRoute.updateUp}))
+        dispatch(addNewPackTC('New title', {sortPacks: SortRoute.updateUp, packName: ''}))
     }
 
     const onPackDelete = (id: string) => {
@@ -84,31 +88,36 @@ const Packs = () => {
 
     // const searchByNameHandler = (e: ChangeEvent<HTMLInputElement>) => {  // Как реализовать live поиск ?
     //     setSearchName(e.currentTarget.value)
-    //     dispatch(getPacksTC({packName: searchName, userId}))
+    //     dispatch(getPacksTC({packName: searchName}))
     // }
 
     const searchByNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchName(e.currentTarget.value)
     }
     const onSearchClick = () => {
-        dispatch(getPacksTC({packName: searchName, userId}))
+        dispatch(getPacksTC({packName: searchName}))
+        setSearchName('')
     }
 
     const onSortClick = (sortRoute: string) => { 
         dispatch(getPacksTC({sortPacks: sortRoute}))
     }
 
+    const onPageChanged = (pageNumber: number) => {
+        setCurrentPage(pageNumber)
+        dispatch(getPacksTC({page: pageNumber}))
+    }
 
     if(!isLoggedIn){
         return <Redirect to='/login'/>
     }
 
     return (
-        <>  
+        <div style={{marginTop: '30px'}}>  
             <div>Search pack by name</div>
-            <input type='text' onChange={searchByNameHandler} value={searchName} style={{border: '1px solid', width: '200px', height: '30px'}}/>
+            <input type='text' onChange={searchByNameHandler} value={searchName} style={{border: '1px solid', width: '200px', height: '30px', paddingLeft: '15px'}}/>
             <button onClick={onSearchClick} style={{width: '50px', height: '30px', marginRight: '50px'}}>Search</button>
-            <button onClick={onAddNewPack} style={{width: '100px', height: '60px'}}>Add pack</button>
+            <button onClick={onAddNewPack} style={{width: '100px', height: '40px'}}>Add pack</button>
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map((headerGroup) => (            
@@ -138,8 +147,16 @@ const Packs = () => {
                     })}
                 </tbody>
             </table>
+            <div style={{marginLeft: '400px', marginTop: '30px'}}>
+                <Paginator 
+                totalItemsCount={packsTotalCount}
+                itemsOnPage={itemsOnPage}
+                currentPage={currentPage}
+                onPageChanged={onPageChanged}
+                />
+            </div>
             <AlertPopup message={serverErrorMessage}/>
-        </>
+        </div>
     )
 }
 

@@ -5,8 +5,8 @@ import {packsAPI} from "../../api/api";
 
 
 const initialState: InitialState = {
-    cardPacks: [],
-    cardPacksTotalCount: 0,
+    packs: [],
+    packsTotalCount: 0,
     error: '',
     requestParams: {
         packName: '',
@@ -26,8 +26,8 @@ export const packsReducer = (state = initialState, action: PacksActionsType): In
         case 'packs/SET_PACKS':
             return {
                 ...state,
-                cardPacks: action.packs,
-                cardPacksTotalCount: action.cardPacksTotalCount
+                packs: action.packs,
+                packsTotalCount: action.cardPacksTotalCount
             }
 
         case 'packs/SET_ERROR_MESSAGE':
@@ -115,8 +115,8 @@ export const UpdatePackTC = (_id: string, newTitle: string): ThunkType => {
 
 //types
 type InitialState = {
-    cardPacks: Array<PacksType>
-    cardPacksTotalCount: number
+    packs: Array<PacksType>
+    packsTotalCount: number
     error: string
     requestParams: GetPacksRequestType
 }
