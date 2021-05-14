@@ -1,6 +1,6 @@
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AppRootStateType} from "../store";
-import {loginAPI} from "../../api/loginAPI";
+import {loginAPI} from "../../api/api";
 
 const initialState: InitialForgotStateType = {
     info: '',

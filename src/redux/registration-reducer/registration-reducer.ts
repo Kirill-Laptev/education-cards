@@ -1,4 +1,4 @@
-import { loginAPI } from './../../api/loginAPI';
+import { loginAPI } from '../../api/api';
 import { AppRootStateType } from './../store';
 import { ThunkDispatch, ThunkAction } from "redux-thunk"
 

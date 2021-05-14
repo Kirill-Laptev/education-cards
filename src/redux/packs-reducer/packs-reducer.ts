@@ -1,13 +1,23 @@
-import { PacksType, NewPackResponseType } from './../../api/loginAPI';
+import { AppRootStateType } from './../store';
+import { PacksType } from '../../api/api';
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
-import {AppRootStateType} from "../store";
-import {packsAPI} from "../../api/loginAPI";
+import {packsAPI} from "../../api/api";
 
 
 const initialState: InitialState = {
     cardPacks: [],
     cardPacksTotalCount: 0,
-    error: ''
+    error: '',
+    requestParams: {
+        packName: '',
+        min: 0,
+        max: 0,
+        sortPacks: '0updated',
+        page: 1,
+        pageCount: 10,
+        userId: '',
+        // token: ''
+    }
 }
 
 export const packsReducer = (state = initialState, action: PacksActionsType): InitialState => {
@@ -26,6 +36,12 @@ export const packsReducer = (state = initialState, action: PacksActionsType): In
                 error: action.errorMessage
             }
 
+        case 'packs/UPDATE_PARAMS_REQUEST':
+            return {
+                ...state,
+                requestParams: {...state.requestParams, ...action.newParams}
+            }
+
         default:
             return state
     }
@@ -39,13 +55,17 @@ export const setPacksAC = (packs: Array<PacksType>, cardPacksTotalCount: number)
 
 const setErrorMessageAC = (errorMessage: string) => ({type: 'packs/SET_ERROR_MESSAGE', errorMessage} as const)
 
-export const setNameAC = (name: string) => ({type: 'packs/SET_NAME_PACK', name} as const)
+export const updateRequestParamsAC = (newParams: GetPacksRequestType) => ({type: 'packs/UPDATE_PARAMS_REQUEST', newParams} as const)
+
+// export const setNameAC = (name: string) => ({type: 'packs/SET_NAME_PACK', name} as const)
 
 //thunks
-export const getPacksTC = (): ThunkType => {
-    return async (dispatch: DispatchType) => {
+export const getPacksTC = (params: GetPacksRequestType): ThunkType => {
+    return async (dispatch: DispatchType, getState: () => AppRootStateType) => {
         try {
-            const res = await packsAPI.getPacks()
+            dispatch(updateRequestParamsAC(params))
+            const newParams = getState().packs.requestParams
+            const res = await packsAPI.getPacks(newParams)
             dispatch(setPacksAC(res.data.cardPacks, res.data.cardPacksTotalCount))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
@@ -54,11 +74,12 @@ export const getPacksTC = (): ThunkType => {
     }
 }
 
-export const addNewPackTC = (): ThunkType => {
-    return async (dispatch: DispatchType) => {
+export const addNewPackTC = (title: string, params: GetPacksRequestType): ThunkType => {
+    return async (dispatch: DispatchType, getState: () => AppRootStateType) => {
         try {
-            await packsAPI.addPack()
-            dispatch(getPacksTC())
+            dispatch(updateRequestParamsAC(params))
+            await packsAPI.addPack(title)
+            dispatch(getPacksTC(getState().packs.requestParams))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
             dispatch(setErrorMessageAC(''))
@@ -67,10 +88,10 @@ export const addNewPackTC = (): ThunkType => {
 }
 
 export const deletePackTC = (id: string): ThunkType => {
-    return async (dispatch: DispatchType) => {
+    return async (dispatch: DispatchType, getState: () => AppRootStateType) => {
         try {
             await packsAPI.deletePack(id)
-            dispatch(getPacksTC())
+            dispatch(getPacksTC(getState().packs.requestParams))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
             dispatch(setErrorMessageAC(''))
@@ -78,11 +99,11 @@ export const deletePackTC = (id: string): ThunkType => {
     }
 }
 
-export const UpdatePackTC = (_id: string): ThunkType => {
-    return async (dispatch: DispatchType) => {
+export const UpdatePackTC = (_id: string, newTitle: string): ThunkType => {
+    return async (dispatch: DispatchType, getState: () => AppRootStateType) => {
         try {
-            await packsAPI.updatePack(_id)
-            dispatch(getPacksTC())
+            await packsAPI.updatePack(_id, newTitle)
+            dispatch(getPacksTC(getState().packs.requestParams))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
             dispatch(setErrorMessageAC(''))
@@ -97,14 +118,32 @@ type InitialState = {
     cardPacks: Array<PacksType>
     cardPacksTotalCount: number
     error: string
+    requestParams: GetPacksRequestType
 }
 
 export type PacksActionsType =
 | ReturnType<typeof setPacksAC>
 | ReturnType<typeof setErrorMessageAC>
+| ReturnType<typeof updateRequestParamsAC>
 
 type DispatchType = ThunkDispatch<AppRootStateType, unknown, PacksActionsType>
 type ThunkType = ThunkAction<void, AppRootStateType, unknown, PacksActionsType>
+
+
+export type GetPacksRequestType = {
+    packName?: string
+    min?: number
+    max?: number
+    sortPacks?: string   //0name, 1name, 
+    page?: number
+    pageCount?: number
+    userId?: string
+    token?: string
+}
+
+
+
+
 
 
 // type CardsType = {

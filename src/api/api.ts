@@ -1,3 +1,4 @@
+import { GetPacksRequestType } from '../redux/packs-reducer/packs-reducer';
 import axios from 'axios'
 
 const settings = {
@@ -38,36 +39,40 @@ export const loginAPI = {
 
 
 export const packsAPI = {
-    getPacks: (countItems: number = 100) => {
-        return instance.get<PacksResponseType>(`cards/pack?pageCount=${countItems}`)
+    getPacks: (paramsRequest: GetPacksRequestType) => {
+        return instance.get<PacksResponseType>('cards/pack', {params: paramsRequest})
     },
-    addPack: (title: string = "yo it's my pack") => {
+    // getPacks: (paramsRequest: GetPacksRequestType) => {
+    //     const {packName, min, max, sortPacks, page, pageCount, userId, token} = paramsRequest
+    //     return instance.get<PacksResponseType>(`cards/pack?packName=${packName}&sortPacks=${sortPacks}&min=${min}&max=${max}&page=${page}&pageCount=${pageCount}&user_id=${userId}`)
+    // },
+    addPack: (title: string) => {
         return instance.post<NewPackResponseType>(`cards/pack`, {cardsPack: {name: title} })
     },
     deletePack: (id: string) => {
         return instance.delete(`cards/pack?id=${id}`)
     },
-    updatePack: (_id: string, name: string = "yo it's my updated pack") => {
+    updatePack: (_id: string, name: string) => {
         return instance.put('cards/pack', {cardsPack: {_id, name}})
     }
 }
 
-export const cardsAPI = {
-    getCards: (cardPackId: string, cardQuestion: string, cardAnswer: string, min?: number, max?: number, sortCards?: string,
-               page?: number, pageCount?: number) => {
-        return instance.get(`cards/card?pageCount=10&cardsPack_id=${cardPackId}
-        &cardQuestion=${cardQuestion}&cardAnswer=${cardAnswer}&min=${min}&max=${max}&sortPacks=${sortCards}&page=${page}&pageCount=${pageCount}`)
-    },
-    addCards: (data: CardsType) => {
-        return instance.post(`cards/pack`, data)
-    },
-    updateCard: (card: UpdateCardType) => {
-        return instance.put(`cards/card`, {card})
-    },
-    deleteCard: (id: string) => {
-        return instance.delete(`cards/card?id=${id}`)
-    },
-}
+// export const cardsAPI = {
+//     getCards: (cardPackId: string, cardQuestion: string, cardAnswer: string, min?: number, max?: number, sortCards?: string,
+//                page?: number, pageCount?: number) => {
+//         return instance.get(`cards/card?pageCount=10&cardsPack_id=${cardPackId}
+//         &cardQuestion=${cardQuestion}&cardAnswer=${cardAnswer}&min=${min}&max=${max}&sortPacks=${sortCards}&page=${page}&pageCount=${pageCount}`)
+//     },
+//     addCards: (data: CardsType) => {
+//         return instance.post(`cards/pack`, data)
+//     },
+//     updateCard: (card: UpdateCardType) => {
+//         return instance.put(`cards/card`, {card})
+//     },
+//     deleteCard: (id: string) => {
+//         return instance.delete(`cards/card?id=${id}`)
+//     },
+// }
 
 // export const profileAPI = {
 //     updateProfile: (data: {name: string, avatar: string}) => {
@@ -94,6 +99,8 @@ export type AuthResponseType = {
     verified: boolean; // подтвердил ли почту	
     rememberMe: boolean;
     error?: string;
+    token: string
+    tokenDeathTime: number
 }
 
 export type MultiResponseType = {
@@ -137,7 +144,9 @@ export type PacksResponseType = {
     maxCardsCount: number			
     minCardsCount: number			
     page: number			
-    pageCount: number		
+    pageCount: number	
+    token: string
+    tokenDeathTime: number	
 }
 
 export type PacksType = {

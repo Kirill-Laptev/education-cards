@@ -1,6 +1,6 @@
 import { setUserDataAC, SetUserDataActionType } from './../profile-reducer/profile-reducer';
 import { AppRootStateType } from './../store';
-import { loginAPI } from './../../api/loginAPI';
+import { loginAPI } from '../../api/api';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 
 const initialState: InitialStateType = {

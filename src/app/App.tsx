@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { appInicializeTC } from '../redux/app-reducer/app-reducer';
 import preloader from '../assets/img/preloader.svg'
 import Preloader from '../components/Preloader/Preloader';
-import Test from '../features/test/Test';
+import Packs from '../features/packs/Packs';
 
 
 const App = () => {
@@ -38,7 +38,7 @@ const App = () => {
               <Route path='/profile' render={() => <Profile />}/>
                 <Route path='/forgotpassword' render={() => <div><ForgotPasswordForm/></div>}/>
               <Route path='/newpassword' render={() => <div><NewPassword/></div>}/>
-              <Route path='/test' render={() => <Test />}/>      
+              <Route path='/test' render={() => <Packs />}/>      
               <Route path='*' render={() => <div>404 Not Found</div>}/>    
             </Switch>     
           </div>
