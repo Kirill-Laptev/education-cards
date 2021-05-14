@@ -1,6 +1,6 @@
-import { AuthResponseType } from './../../api/loginAPI';
+import { AuthResponseType } from '../../api/api';
 
-const initialState: AuthResponseType | {} = {}
+const initialState = {} as AuthResponseType 
 
 export const profileReducer = (state = initialState, action: ProfileActionsType) => {
     switch(action.type){

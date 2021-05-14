@@ -1,6 +1,6 @@
 import { setIsLoggedInAC, SetIsLoggedInActionType } from './../login-reducer/login-reducer';
 import {setUserDataAC, SetUserDataActionType} from './../profile-reducer/profile-reducer';
-import { loginAPI } from './../../api/loginAPI';
+import { loginAPI } from '../../api/api';
 import { AppRootStateType } from './../store';
 import { ThunkDispatch, ThunkAction } from "redux-thunk"
 

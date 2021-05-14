@@ -19,7 +19,6 @@ const AlertPopup: React.FC<ErrorPopupPropsType> = ({message, serverRequestSucces
     // Без useEffect попап всплывает 2 раза
     useEffect(() => {
         if(message){
-            debugger
             toast(viewMessage().toUpperCase())
         }
         if(serverRequestSuccess){
