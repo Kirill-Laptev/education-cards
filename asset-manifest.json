@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/education-cards/static/css/main.73a012cb.chunk.css",
-    "main.js": "/education-cards/static/js/main.a6631692.chunk.js",
-    "main.js.map": "/education-cards/static/js/main.a6631692.chunk.js.map",
-    "runtime-main.js": "/education-cards/static/js/runtime-main.a51055b7.js",
-    "runtime-main.js.map": "/education-cards/static/js/runtime-main.a51055b7.js.map",
+    "main.css": "/education-cards/static/css/main.77a2af55.chunk.css",
+    "main.js": "/education-cards/static/js/main.f410431a.chunk.js",
+    "main.js.map": "/education-cards/static/js/main.f410431a.chunk.js.map",
+    "runtime-main.js": "/education-cards/static/js/runtime-main.07b0a108.js",
+    "runtime-main.js.map": "/education-cards/static/js/runtime-main.07b0a108.js.map",
     "static/css/2.c55f41dc.chunk.css": "/education-cards/static/css/2.c55f41dc.chunk.css",
-    "static/js/2.6d781dba.chunk.js": "/education-cards/static/js/2.6d781dba.chunk.js",
-    "static/js/2.6d781dba.chunk.js.map": "/education-cards/static/js/2.6d781dba.chunk.js.map",
-    "static/js/3.ea60b1e8.chunk.js": "/education-cards/static/js/3.ea60b1e8.chunk.js",
-    "static/js/3.ea60b1e8.chunk.js.map": "/education-cards/static/js/3.ea60b1e8.chunk.js.map",
+    "static/js/2.165565ba.chunk.js": "/education-cards/static/js/2.165565ba.chunk.js",
+    "static/js/2.165565ba.chunk.js.map": "/education-cards/static/js/2.165565ba.chunk.js.map",
+    "static/js/3.b01ae953.chunk.js": "/education-cards/static/js/3.b01ae953.chunk.js",
+    "static/js/3.b01ae953.chunk.js.map": "/education-cards/static/js/3.b01ae953.chunk.js.map",
     "index.html": "/education-cards/index.html",
     "static/css/2.c55f41dc.chunk.css.map": "/education-cards/static/css/2.c55f41dc.chunk.css.map",
-    "static/css/main.73a012cb.chunk.css.map": "/education-cards/static/css/main.73a012cb.chunk.css.map",
-    "static/js/2.6d781dba.chunk.js.LICENSE.txt": "/education-cards/static/js/2.6d781dba.chunk.js.LICENSE.txt",
+    "static/css/main.77a2af55.chunk.css.map": "/education-cards/static/css/main.77a2af55.chunk.css.map",
+    "static/js/2.165565ba.chunk.js.LICENSE.txt": "/education-cards/static/js/2.165565ba.chunk.js.LICENSE.txt",
     "static/media/enter.423cec00.svg": "/education-cards/static/media/enter.423cec00.svg",
     "static/media/key.4ca8f8c2.svg": "/education-cards/static/media/key.4ca8f8c2.svg",
     "static/media/note.129a606a.svg": "/education-cards/static/media/note.129a606a.svg",
@@ -21,10 +21,10 @@
     "static/media/rotation-lock.fb2f4187.svg": "/education-cards/static/media/rotation-lock.fb2f4187.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.a51055b7.js",
+    "static/js/runtime-main.07b0a108.js",
     "static/css/2.c55f41dc.chunk.css",
-    "static/js/2.6d781dba.chunk.js",
-    "static/css/main.73a012cb.chunk.css",
-    "static/js/main.a6631692.chunk.js"
+    "static/js/2.165565ba.chunk.js",
+    "static/css/main.77a2af55.chunk.css",
+    "static/js/main.f410431a.chunk.js"
   ]
 }
