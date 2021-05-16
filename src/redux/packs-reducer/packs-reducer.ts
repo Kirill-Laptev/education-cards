@@ -134,7 +134,7 @@ export type GetPacksRequestType = {
     packName?: string
     min?: number
     max?: number
-    sortPacks?: string   //0name, 1name, 
+    sortPacks?: string 
     page?: number
     pageCount?: number
     userId?: string

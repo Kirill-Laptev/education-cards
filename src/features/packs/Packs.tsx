@@ -1,81 +1,57 @@
-import React, { useEffect, useState, ChangeEvent } from 'react'
-import { useTable, Column } from 'react-table'
-import './table.css'
+import React, { useMemo, useEffect, useState, ChangeEvent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppRootStateType } from '../../redux/store'
-import { getPacksTC, addNewPackTC, deletePackTC, UpdatePackTC, GetPacksRequestType } from '../../redux/packs-reducer/packs-reducer'
 import { PacksType } from '../../api/api'
-import AlertPopup from '../../components/AlertPopup/AlertPopup'
+import s from './Packs.module.css'
+import { getPacksTC, GetPacksRequestType, UpdatePackTC, deletePackTC, addNewPackTC } from '../../redux/packs-reducer/packs-reducer'
 import { Redirect } from 'react-router-dom'
-import { SortRoute } from '../../helpers/enum'
+import { SortDirection } from '../../helpers/enum'
+import { BiEdit as EditIcon } from 'react-icons/bi'
+import { TiDeleteOutline as DeleteIcon } from 'react-icons/ti'
+import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
+import { BsCaretUpFill as UpIcon } from 'react-icons/bs'
+import { BsCaretDownFill as DownIcon } from 'react-icons/bs'
+import AlertPopup from '../../components/AlertPopup/AlertPopup'
 import Paginator from '../../components/Paginator/Paginator'
-
 
 const Packs = () => {
 
     const dispatch = useDispatch()
 
-    const [searchName, setSearchName] = useState<string>('')
-    const [currentPage, setCurrentPage] = useState(1)
+    const [searchName, setSearchName] = useState('')
+    const [currentPage, setCurrentPage] = useState<number>(1)
 
-    const responseData = useSelector<AppRootStateType, PacksType[]>((state) => state.packs.packs)
+    const packs = useSelector<AppRootStateType, PacksType[]>((state) => state.packs.packs)
     const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.packs.error)
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.login.isLoggedIn)
     const requestParams = useSelector<AppRootStateType, GetPacksRequestType>((state) => state.packs.requestParams) 
     const packsTotalCount = useSelector<AppRootStateType, number>((state) => state.packs.packsTotalCount)
     const itemsOnPage = useSelector<AppRootStateType, number>((state) => state.packs.requestParams.pageCount!)
-    
+    const page = useSelector<AppRootStateType, number>((state) => state.packs.requestParams.page!)
 
-    const columnsNames: Column<PacksType>[] = [  
-        {
-            Header: 'Name',
-            accessor: 'name',
-        },
-        {
-            Header: 'Cards count', 
-            accessor: 'cardsCount'
-        },
-        {
-            Header: 'Updated', 
-            accessor: 'updated'
-        },
-        {
-            Header: 'Action', 
-            //@ts-ignore
-            Cell: ({row: {original}}) => (
-                <div>
-                    <button style={{width: '20px', height: '20px', marginRight: '5px'}} onClick={() => onPackDelete(original._id)}>-</button>
-                    <button style={{height: '20px'}} onClick={() => onUpdatePack(original._id, 'my update pack')}>Update</button>
-                </div>     
-            )
-        },
-        {Header: 'Cards'}
-    ]
+    const columns = useMemo(() => [
+        {id: 1, title: 'Name', icons: [<UpIcon size='15'/>, <DownIcon size='15'/>], sort: [SortDirection.nameUp, SortDirection.nameDown]},
+        {id: 2, title: 'Cards count', icons: [<UpIcon size='15'/>, <DownIcon size='15'/>], sort: [SortDirection.countUp, SortDirection.countDown]},
+        {id: 3, title: 'Updated', icons: [<UpIcon size='15'/>, <DownIcon size='15'/>], sort: [SortDirection.updateUp, SortDirection.updateDown]},
+        {id: 4, title: 'Action'},
+        {id: 5, title: 'Cards'}
+    ], [])
+
+    const packsRows = useMemo(() => packs, [packs])
+
 
     useEffect(() => {
         dispatch(getPacksTC(requestParams))
-    }, [])  
-    
-    
-    const columns = React.useMemo(() => columnsNames, [])
-    const data = React.useMemo(() => responseData, [responseData])
+    }, [])
 
-    const {
-        getTableProps,
-        getTableBodyProps, 
-        headerGroups, 
-        rows, 
-        prepareRow 
-        } = useTable(
-            {
-            columns,
-            data,
-        }
-      )
+    useEffect(() => {
+        setTimeout(() => setCurrentPage(page), 1000) 
+    }, [page])
+
 
 
     const onAddNewPack = () => {
-        dispatch(addNewPackTC('New title', {sortPacks: SortRoute.updateUp, packName: ''}))
+        dispatch(addNewPackTC('New title', {sortPacks: SortDirection.updateUp, packName: '', page: 1}))
     }
 
     const onPackDelete = (id: string) => {
@@ -86,11 +62,6 @@ const Packs = () => {
         dispatch(UpdatePackTC(id, newTitle))
     }
 
-    // const searchByNameHandler = (e: ChangeEvent<HTMLInputElement>) => {  // Как реализовать live поиск ?
-    //     setSearchName(e.currentTarget.value)
-    //     dispatch(getPacksTC({packName: searchName}))
-    // }
-
     const searchByNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchName(e.currentTarget.value)
     }
@@ -99,8 +70,8 @@ const Packs = () => {
         setSearchName('')
     }
 
-    const onSortClick = (sortRoute: string) => { 
-        dispatch(getPacksTC({sortPacks: sortRoute}))
+    const onSortClick = (SortDirection: string) => { 
+        dispatch(getPacksTC({sortPacks: SortDirection, page: 1}))
     }
 
     const onPageChanged = (pageNumber: number) => {
@@ -112,51 +83,71 @@ const Packs = () => {
         return <Redirect to='/login'/>
     }
 
+
     return (
-        <div style={{marginTop: '30px'}}>  
-            <div>Search pack by name</div>
-            <input type='text' onChange={searchByNameHandler} value={searchName} style={{border: '1px solid', width: '200px', height: '30px', paddingLeft: '15px'}}/>
-            <button onClick={onSearchClick} style={{width: '50px', height: '30px', marginRight: '50px'}}>Search</button>
-            <button onClick={onAddNewPack} style={{width: '100px', height: '40px'}}>Add pack</button>
-            <table {...getTableProps()}>
+        <>
+        <div className={s.header}>
+                <div className={s.search__title}><span>Search pack</span></div>
+                <div className={s.search__field}>
+                    <input 
+                    type='text'
+                    placeholder='Search by name' 
+                    onChange={searchByNameHandler}
+                    value={searchName}/>
+                </div>
+                <div className={s.search__btn}>
+                    <button onClick={onSearchClick}>Search</button>
+                </div>
+                <div className={s.add}>
+                    <button onClick={onAddNewPack}><AddIcon size='25'/><span>Add new cardspack</span></button>
+                </div>
+            </div>
+            <table className={s.table}>
                 <thead>
-                    {headerGroups.map((headerGroup) => (            
-                        <tr{...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((column) => (    
-                            <th {...column.getHeaderProps()}>{column.render('Header')}
-                            {column.Header === 'Name' && <span onClick={() => onSortClick(SortRoute.nameUp)}>🔼</span>}
-                            {column.Header === 'Name' &&  <span onClick={() => onSortClick(SortRoute.nameDown)}>🔽</span>}
-                            {column.Header === 'Cards count' && <span onClick={() => onSortClick(SortRoute.countUp)}>🔼</span>}
-                            {column.Header === 'Cards count' && <span onClick={() => onSortClick(SortRoute.countDown)}>🔽</span>}
-                            {column.Header === 'Updated' &&  <span onClick={() => onSortClick(SortRoute.updateUp)}>🔼</span>}
-                            {column.Header === 'Updated' &&  <span onClick={() => onSortClick(SortRoute.updateDown)}>🔽</span>}</th>
-                            ))}
-                        </tr>
-                    ))}            
+                    <tr>
+                        {columns.map((column) => {
+                            return (
+                                <th key={column.id}>
+                                    {column.icons ?
+                                        <div className={s.table__title}>
+                                        <span>{column.title}</span>
+                                        <div className={s.title__icons}>
+                                            <span onClick={() => onSortClick(column.sort[0])}>{column.icons && column.icons[0]}</span>
+                                            <span onClick={() => onSortClick(column.sort[1])}>{column.icons && column.icons[1]}</span>
+                                        </div>
+                                    </div>
+                                    : <span>{column.title}</span>} 
+                                </th>) 
+                            })
+                        }
+                    </tr>
                 </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map((row) => {
-                        prepareRow(row)
-                        return(
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map((cell) => {
-                                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                })}
+                <tbody>
+                        {packsRows.map((row) => (
+                            <tr key={row._id}>
+                                <td>{row.name}</td>
+                                <td>{row.cardsCount}</td>
+                                <td>{row.updated}</td>
+                                <td>
+                                    <div className={s.action__btns}>
+                                        <EditIcon className={s.action__btn} size='25' onClick={() => onUpdatePack(row._id, "yo it's my pack")}/>
+                                        <DeleteIcon className={s.action__btn} size='27' onClick={() => onPackDelete(row._id)}/>
+                                    </div>
+                                </td> 
+                                <td></td>
                             </tr>
-                        )  
-                    })}
+                        ))}
                 </tbody>
-            </table>
-            <div style={{marginLeft: '400px', marginTop: '30px'}}>
+            </table> 
+            <div>
                 <Paginator 
                 totalItemsCount={packsTotalCount}
                 itemsOnPage={itemsOnPage}
                 currentPage={currentPage}
-                onPageChanged={onPageChanged}
-                />
+                onPageChanged={onPageChanged}/>
             </div>
-            <AlertPopup message={serverErrorMessage}/>
-        </div>
+            <AlertPopup message={serverErrorMessage}/>     
+        </>
     )
 }
 

@@ -1,21 +1,38 @@
+.paginator{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
 .btn__active{
-    font-weight: bold;
-    background-color: #64c37d;
-    padding: 8px 12px;
-    text-decoration: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
+  font-weight: bold;
+  background-color: #64c37d;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn {
+  color: black;
+  padding: 8px 12px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.btn {
-    color: black;
-    padding: 8px 12px;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  .btn:hover:not(.btn__active) {
-    background-color: #ddd;
-    border-radius: 5px;
-  }
+.btn:hover:not(.btn__active) {
+  background-color: #ddd;
+  border-radius: 5px;
+}
+.icon__prev{
+  cursor: pointer;
+}
+.icon__prev:hover{
+  background-color: #ddd;
+}
+.icon__next{
+  cursor: pointer;
+}
+.icon__next:hover{
+  background-color: #ddd;
+}
