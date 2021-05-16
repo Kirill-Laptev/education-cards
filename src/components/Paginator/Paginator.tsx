@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import s from './Paginator.module.css'
+import { FiChevronRight as RigthIcon } from 'react-icons/fi'
+import { FiChevronLeft as LeftIcon } from 'react-icons/fi'
 
 const Paginator: React.FC<PaginatorPropsType> = ({totalItemsCount, itemsOnPage, currentPage, onPageChanged}) => {
 
@@ -19,9 +21,9 @@ const Paginator: React.FC<PaginatorPropsType> = ({totalItemsCount, itemsOnPage, 
     const rightPortionPageNumber = portionNumber * 10
 
     return (
-        <div>
+        <div className={s.paginator}>
             {portionNumber > 1
-            ? <button onClick={() => setPortionNumber(portionNumber - 1)} className={s.btn__prev}>PREV</button>  // Только если у нас номер порции больше 1 - показываем кнопку влево
+            ? <LeftIcon size='20' onClick={() => setPortionNumber(portionNumber - 1)} className={s.icon__prev}/>
             : ''}
 
             {pages
@@ -32,11 +34,14 @@ const Paginator: React.FC<PaginatorPropsType> = ({totalItemsCount, itemsOnPage, 
                 })}
 
             {portionCount > portionNumber // Стрелка вправо будет показываться только тогда когда количество порций больше, чем количество текущей порции
-            ? <button onClick={() => setPortionNumber(portionNumber + 1)} className={s.btn__next}>NEXT</button> // При клике на стрелку устанавливаем номер  порции больше на 1
+            ? <RigthIcon size='20' onClick={() => setPortionNumber(portionNumber + 1)} className={s.icon__next}/>
             : ''} 
         </div>
     )
 }
+
+{/* <button >NEXT</button> // При клике на стрелку устанавливаем номер  порции больше на 1 */}
+{/* <button onClick={() => setPortionNumber(portionNumber - 1)} className={s.btn__prev}>PREV</button>  // Только если у нас номер порции больше 1 - показываем кнопку влево */}
 
 export default Paginator
 

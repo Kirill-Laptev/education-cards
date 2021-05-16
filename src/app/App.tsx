@@ -10,9 +10,9 @@ import Profile from '../features/profile/Profile';
 import { AppRootStateType } from '../redux/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { appInicializeTC } from '../redux/app-reducer/app-reducer';
-import preloader from '../assets/img/preloader.svg'
 import Preloader from '../components/Preloader/Preloader';
 import Packs from '../features/packs/Packs';
+import RangeSlider from '../components/RangeSlider/RangeSlider'
 
 
 const App = () => {
@@ -39,7 +39,8 @@ const App = () => {
               <Route path='/forgotpassword' render={() => <div><ForgotPasswordForm/></div>}/>
               <Route path='/newpassword' render={() => <div><NewPassword/></div>}/>
               <Route path='/packs' render={() => <Packs />}/>      
-              <Route path='/' render={() => <Profile />}/>  
+              <Route path='/test' render={() => <RangeSlider />}/>  
+              <Route path='/' render={() => <Profile />}/> 
               <Route path='*' render={() => <div>404 Not Found</div>}/>    
             </Switch>     
           </div>

@@ -1,4 +1,4 @@
-export enum SortRoute {
+export enum SortDirection {
     nameUp = '0name',
     nameDown = '1name',
     countUp = '0cardsCount',
