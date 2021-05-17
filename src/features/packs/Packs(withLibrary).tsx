@@ -103,7 +103,7 @@ const Packs = () => {
         dispatch(getPacksTC({sortPacks: SortDirection}))
     }
 
-    const onPageChanged = (pageNumber: number) => {
+    const onPageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber)
         dispatch(getPacksTC({page: pageNumber}))
     }
@@ -152,7 +152,7 @@ const Packs = () => {
                 totalItemsCount={packsTotalCount}
                 itemsOnPage={itemsOnPage}
                 currentPage={currentPage}
-                onPageChanged={onPageChanged}
+                onPageChange={onPageChange}
                 />
             </div>
             <AlertPopup message={serverErrorMessage}/>
