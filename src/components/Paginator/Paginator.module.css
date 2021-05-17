@@ -1,8 +1,6 @@
 .paginator{
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-top: 15px;
 }
 .btn__active{
   font-weight: bold;

@@ -92,11 +92,11 @@ export type AuthResponseType = {
     email: string;
     name: string;
     avatar?: string;
-    publicCardPacksCount: number; // количество колод
+    publicCardPacksCount: number; 
     created: Date;
     updated: Date;
     isAdmin: boolean;
-    verified: boolean; // подтвердил ли почту	
+    verified: boolean; 	
     rememberMe: boolean;
     error?: string;
     token: string
@@ -117,26 +117,6 @@ export type NewPassDataType = {
     password: string
     resetPasswordToken: string | undefined
 }
-
-// export type CardsType = {
-//     cardsPack_id: string,
-//     question?: string,
-//     answer?: string,
-//     grade?: number,
-//     shots?: number,
-//     rating?: number,
-//     answerImg?: string,
-//     questionImg?: string,
-//     questionVideo?: string,
-//     answerVideo?: string,
-//     type?: string
-// }
-
-// export type UpdateCardType = {
-//     _id: string
-//     question: string
-//     comments: string
-// }
 
 export type PacksResponseType = {
     cardPacks: Array<PacksType>					
@@ -185,3 +165,23 @@ export type OnPackActionResponseType = {
     token: string
     tokenDeathTime: number 
 }
+
+// export type CardsType = {
+//     cardsPack_id: string,
+//     question?: string,
+//     answer?: string,
+//     grade?: number,
+//     shots?: number,
+//     rating?: number,
+//     answerImg?: string,
+//     questionImg?: string,
+//     questionVideo?: string,
+//     answerVideo?: string,
+//     type?: string
+// }
+
+// export type UpdateCardType = {
+//     _id: string
+//     question: string
+//     comments: string
+// }

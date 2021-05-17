@@ -13,6 +13,7 @@ import { BsCaretUpFill as UpIcon } from 'react-icons/bs'
 import { BsCaretDownFill as DownIcon } from 'react-icons/bs'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
 import Paginator from '../../components/Paginator/Paginator'
+import Select from '../../components/Select/Select'
 
 const Packs = () => {
 
@@ -48,6 +49,9 @@ const Packs = () => {
         setTimeout(() => setCurrentPage(page), 1000) 
     }, [page])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [itemsOnPage])
 
 
     const onAddNewPack = () => {
@@ -74,9 +78,13 @@ const Packs = () => {
         dispatch(getPacksTC({sortPacks: SortDirection, page: 1}))
     }
 
-    const onPageChanged = (pageNumber: number) => {
+    const onPageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber)
         dispatch(getPacksTC({page: pageNumber}))
+    }
+
+    const onItemsCountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        dispatch(getPacksTC({pageCount: +e.currentTarget.value}))
     }
 
     if(!isLoggedIn){
@@ -139,14 +147,16 @@ const Packs = () => {
                         ))}
                 </tbody>
             </table> 
-            <div>
+            <div className={s.table__footer}>
                 <Paginator 
                 totalItemsCount={packsTotalCount}
                 itemsOnPage={itemsOnPage}
                 currentPage={currentPage}
-                onPageChanged={onPageChanged}/>
-            </div>
-            <AlertPopup message={serverErrorMessage}/>     
+                onPageChange={onPageChange}
+                />
+                <Select onSelectValue={onItemsCountChange}/>
+                <AlertPopup message={serverErrorMessage}/>  
+            </div>   
         </>
     )
 }

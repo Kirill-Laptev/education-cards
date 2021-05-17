@@ -1,0 +1,29 @@
+.select__outer{
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    margin-left: 170px;
+}
+.select{
+    display: block;
+    appearance: none;
+    width: 65px;
+    height: 35px;
+    background: no-repeat right/12% url(../../assets/img/arrow-down.svg);
+    background-position-x: calc(100% - 8px);
+    background-color: #fff;
+    font-size: 15px;
+    text-align-last: center; 
+    text-align: center; 
+    border: 1px solid;
+    border-radius: 5px;
+    padding-right: 8px;
+}
+.select__start{
+    font-size: 15px;
+    margin-right: 10px;
+}
+.select__end{
+    font-size: 15px;
+    margin-left: 10px;
+}
