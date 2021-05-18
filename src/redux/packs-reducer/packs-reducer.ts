@@ -53,11 +53,10 @@ export const setPacksAC = (packs: Array<PacksType>, cardPacksTotalCount: number)
     return {type: 'packs/SET_PACKS' as const, packs, cardPacksTotalCount}
 } 
 
+const updateRequestParamsAC = (newParams: GetPacksRequestType) => ({type: 'packs/UPDATE_PARAMS_REQUEST', newParams} as const)
+
 const setErrorMessageAC = (errorMessage: string) => ({type: 'packs/SET_ERROR_MESSAGE', errorMessage} as const)
 
-export const updateRequestParamsAC = (newParams: GetPacksRequestType) => ({type: 'packs/UPDATE_PARAMS_REQUEST', newParams} as const)
-
-// export const setNameAC = (name: string) => ({type: 'packs/SET_NAME_PACK', name} as const)
 
 //thunks
 export const getPacksTC = (params: GetPacksRequestType): ThunkType => {
@@ -130,6 +129,7 @@ type DispatchType = ThunkDispatch<AppRootStateType, unknown, PacksActionsType>
 type ThunkType = ThunkAction<void, AppRootStateType, unknown, PacksActionsType>
 
 
+// Перенести в API
 export type GetPacksRequestType = {
     packName?: string
     min?: number
@@ -140,25 +140,3 @@ export type GetPacksRequestType = {
     userId?: string
     token?: string
 }
-
-
-
-
-
-
-// type CardsType = {
-//     cardsCount: number
-//     created: string
-//     deckCover: null
-//     grade: number
-//     more_id: string
-//     name: string
-//     path: string
-//     private: boolean
-//     rating: number
-//     shots: number
-//     type: string
-//     updated: string
-//     user_id: string
-//     user_name: string
-// }

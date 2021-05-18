@@ -68,55 +68,101 @@
 .add button span{
     margin-left: 5px;
 }
-
 .add button:hover{
     transform: scale(0.92);
     transition: all 0.5s ease 0s;
 }
-.table {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 50px;
-} 
-.table td, table th {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-} 
-.table tr:nth-child(even) {
-    background-color: #f2f2f2;
-} 
-.table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    background-color: #64c37d;
-    color: white;
-}
-.table__title{
+.cards{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 70px;
 }
-.title__icons{
+.card__outer {
+    margin-left: 90px;
+    margin-bottom: 38px;
+}
+.card__inner {
+    width: 280px;
+    min-height: 440px;
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
-    cursor: pointer;
+    align-items: center;
+    position: relative;
+    border-radius: 15px;
+    background-color: #ffffff;
+    box-shadow: 0px 6px 11px -3px rgba(0,0,0,0.4);
+    padding: 0 10px;
+    position: relative;
 }
-.action__btns{
+.card__img{
+    width: 280px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    border-radius: 15px 15px 0 0;
+    background-color: #1b2541;
 }
-.action__btn{
-    color: #0b2239;
+.card__img img{
+    width: 180px;
+}
+.card__title{
+    font-size: 21px;
+    font-weight: 600;
+    padding-top: 35px;
+    margin-left: 5px;
+}
+.card__subtitle{
+    font-size: 18px;
+    padding-top: 8px;
+}
+.card__rate{
+    font-size: 18px;
+    font-weight: 600;
+    position: absolute;
+    bottom: 110px;
+}
+.card__stars{
+    font-size: 22px;
+    font-weight: 600;
+    color: #ef6c4e;
+    position: absolute;
+    bottom: 85px;
+}
+.card__buttons{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+}
+.card__edit_btn{
+    height: 40px;
+    width: 150px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 9px 15px;
+    background-color: #64c37d;
+    border: 2px solid #64c37d;
+    color: #ffffff;
+    margin-right: 5px;
+    /* position: absolute;
+    bottom: 65px; */
+    transition: ease 0.4s;
+}
+.card__delete_btn{
+    margin-left: 15px;
     cursor: pointer;
 }
-.action__btn:hover{
-    transition-duration: .1s;
-    transform: scale(1.2);
+/* .card__edit_btn:hover{
+    background-color: #1b2541;
+    color: #ffffff;
+    transition: all 0.3s ease 0s;
 }
-.table__footer{
+.card__delete_btn:hover{
+    background-color: #1b2541;
+    color: #ffffff;
+    transition: all 0.3s ease 0s;
+} */
+.cards__footer{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -127,5 +173,5 @@
 .footer__select{
     position: absolute;
     top: 0;
-    right: 10px;
+    right: 100px;
 }

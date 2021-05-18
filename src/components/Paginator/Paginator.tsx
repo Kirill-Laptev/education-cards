@@ -29,7 +29,7 @@ const Paginator: React.FC<PaginatorPropsType> = ({totalItemsCount, itemsOnPage, 
             {pages
             .filter((page) => page >= leftPortionPageNumber && page <= rightPortionPageNumber ) 
             .map((page) => {
-                return <span className={currentPage === page ? s.btn__active: s.btn}
+                return <span key={page} className={currentPage === page ? s.btn__active: s.btn}
                 onClick={ () => {onPageChange(page)}}>{page + ' '}</span>
                 })}
 
