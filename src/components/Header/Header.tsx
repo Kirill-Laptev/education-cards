@@ -29,6 +29,7 @@ const Header = () => {
                     <NavLink to='/newpassword'>New Password</NavLink>
                     <NavLink to='/forgotpassword'>Forgot Password</NavLink>
                     <NavLink to='/packs'>Packs</NavLink>
+                    <NavLink to='/cards'>Cards</NavLink>
                     <NavLink to='/test'>Test</NavLink>
                 </div>
                 {isLoggedIn

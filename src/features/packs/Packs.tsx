@@ -4,7 +4,7 @@ import { AppRootStateType } from '../../redux/store'
 import { PacksType } from '../../api/api'
 import s from './Packs.module.css'
 import { getPacksTC, GetPacksRequestType, UpdatePackTC, deletePackTC, addNewPackTC } from '../../redux/packs-reducer/packs-reducer'
-import { Redirect } from 'react-router-dom'
+import { Redirect, NavLink } from 'react-router-dom'
 import { SortDirection } from '../../helpers/enum'
 import { BiEdit as EditIcon } from 'react-icons/bi'
 import { TiDeleteOutline as DeleteIcon } from 'react-icons/ti'
@@ -45,9 +45,9 @@ const Packs = () => {
         dispatch(getPacksTC(requestParams))
     }, [])
 
-    useEffect(() => {
-        setTimeout(() => setCurrentPage(page), 1000) 
-    }, [page])
+    // useEffect(() => {
+    //     setTimeout(() => setCurrentPage(page), 1000) 
+    // }, [page])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -142,7 +142,7 @@ const Packs = () => {
                                         <DeleteIcon className={s.action__btn} size='27' onClick={() => onPackDelete(row._id)}/>
                                     </div>
                                 </td> 
-                                <td></td>
+                                <td><NavLink to={`/cards/${row._id}`}>Cards</NavLink></td>
                             </tr>
                         ))}
                 </tbody>
@@ -154,7 +154,7 @@ const Packs = () => {
                 currentPage={currentPage}
                 onPageChange={onPageChange}
                 />
-                <Select onSelectValue={onItemsCountChange}/>
+                <div className={s.footer__select}><Select onSelectValue={onItemsCountChange}/></div>
                 <AlertPopup message={serverErrorMessage}/>  
             </div>   
         </>

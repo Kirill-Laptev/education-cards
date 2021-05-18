@@ -1,3 +1,4 @@
+import { CardsActionsType, cardsReducer } from './cards-reducer/cards-reducer';
 import { appReducer, AppActionsType } from './app-reducer/app-reducer';
 import { passwordReducer, PasswordActionsType } from './password-reducer/password-reducer';
 import { profileReducer, ProfileActionsType } from './profile-reducer/profile-reducer';
@@ -6,7 +7,7 @@ import { loginReducer, LoginActionsType } from './login-reducer/login-reducer';
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import thunkMiddleware from 'redux-thunk'
 import {ForgotPassActionsType, forgotReducer} from "./forgot-reducer/forgot-reducer";
-import { packsReducer } from './packs-reducer/packs-reducer';
+import { packsReducer, PacksActionsType } from './packs-reducer/packs-reducer';
 
 const rootReducer = combineReducers({
     login: loginReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     password: passwordReducer,
     forgot: forgotReducer,
     app: appReducer,
-    packs: packsReducer
+    packs: packsReducer,
+    cards: cardsReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
@@ -29,6 +31,8 @@ export type AllAppActionsType =
 | ForgotPassActionsType
 | PasswordActionsType
 | AppActionsType
+| PacksActionsType
+| CardsActionsType
 
 
 // @ts-ignore

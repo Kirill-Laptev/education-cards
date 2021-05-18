@@ -13,6 +13,9 @@ import { appInicializeTC } from '../redux/app-reducer/app-reducer';
 import Preloader from '../components/Preloader/Preloader';
 import Packs from '../features/packs/Packs';
 import RangeSlider from '../components/RangeSlider/RangeSlider'
+import Cards from '../features/cards/Cards';
+import Learn from '../features/learn/Learn';
+// import { Test } from '../components/ModalPopup/ModalPopup';
 
 
 const App = () => {
@@ -39,7 +42,8 @@ const App = () => {
               <Route path='/forgotpassword' render={() => <div><ForgotPasswordForm/></div>}/>
               <Route path='/newpassword' render={() => <div><NewPassword/></div>}/>
               <Route path='/packs' render={() => <Packs />}/>      
-              <Route path='/test' render={() => <RangeSlider />}/>  
+              <Route path='/cards/:id' render={() => <Cards />}/>  
+              {/* <Route path='/test' render={() => <Test />}/>    */}
               <Route path='/' render={() => <Profile />}/> 
               <Route path='*' render={() => <div>404 Not Found</div>}/>    
             </Switch>     
