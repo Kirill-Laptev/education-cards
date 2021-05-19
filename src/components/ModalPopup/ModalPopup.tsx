@@ -12,7 +12,6 @@ const ModalPopup: React.FC<ModalPopupPropsType > = ({show, setShow, children}) =
             onClick={(e: SyntheticEvent) => e.stopPropagation()}>
                 <div>
                     {children}
-                    Hello
                 </div>
             </div>
         </div>
@@ -24,6 +23,4 @@ export default ModalPopup
 type ModalPopupPropsType = {
     show: boolean
     setShow: (value: boolean) => void
-    // isActive: boolean
-    // setIsActive: (value: boolean) => void
 }

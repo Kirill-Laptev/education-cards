@@ -17,7 +17,8 @@ const initialState: InitialState = {
         pageCount: 10,
         userId: '',
         // token: ''
-    }
+    },
+    isPackActionSuccess: false
 }
 
 export const packsReducer = (state = initialState, action: PacksActionsType): InitialState => {
@@ -42,6 +43,12 @@ export const packsReducer = (state = initialState, action: PacksActionsType): In
                 requestParams: {...state.requestParams, ...action.newParams}
             }
 
+        case 'packs/SET_PACK_ACTION_STATUS':
+            return {
+                ...state,
+                isPackActionSuccess: action.isSuccess
+            }   
+            
         default:
             return state
     }
@@ -54,8 +61,8 @@ export const setPacksAC = (packs: Array<PacksType>, cardPacksTotalCount: number)
 } 
 
 const updateRequestParamsAC = (newParams: GetPacksRequestType) => ({type: 'packs/UPDATE_PARAMS_REQUEST', newParams} as const)
-
 const setErrorMessageAC = (errorMessage: string) => ({type: 'packs/SET_ERROR_MESSAGE', errorMessage} as const)
+export const setPackActionStatusAC = (isSuccess: boolean) => ({type: 'packs/SET_PACK_ACTION_STATUS', isSuccess} as const) 
 
 
 //thunks
@@ -78,6 +85,7 @@ export const addNewPackTC = (title: string, params: GetPacksRequestType): ThunkT
         try {
             dispatch(updateRequestParamsAC(params))
             await packsAPI.addPack(title)
+            dispatch(setPackActionStatusAC(true))
             dispatch(getPacksTC(getState().packs.requestParams))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
@@ -90,6 +98,7 @@ export const deletePackTC = (id: string): ThunkType => {
     return async (dispatch: DispatchType, getState: () => AppRootStateType) => {
         try {
             await packsAPI.deletePack(id)
+            dispatch(setPackActionStatusAC(true))
             dispatch(getPacksTC(getState().packs.requestParams))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
@@ -102,6 +111,7 @@ export const UpdatePackTC = (_id: string, newTitle: string): ThunkType => {
     return async (dispatch: DispatchType, getState: () => AppRootStateType) => {
         try {
             await packsAPI.updatePack(_id, newTitle)
+            dispatch(setPackActionStatusAC(true))
             dispatch(getPacksTC(getState().packs.requestParams))
         } catch (e) {
             dispatch(setErrorMessageAC(e.response ? e.response.data.error : e.message))
@@ -118,12 +128,14 @@ type InitialState = {
     packsTotalCount: number
     error: string
     requestParams: GetPacksRequestType
+    isPackActionSuccess: boolean
 }
 
 export type PacksActionsType =
 | ReturnType<typeof setPacksAC>
 | ReturnType<typeof setErrorMessageAC>
 | ReturnType<typeof updateRequestParamsAC>
+| ReturnType<typeof setPackActionStatusAC>
 
 type DispatchType = ThunkDispatch<AppRootStateType, unknown, PacksActionsType>
 type ThunkType = ThunkAction<void, AppRootStateType, unknown, PacksActionsType>
