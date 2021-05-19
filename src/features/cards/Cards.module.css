@@ -133,7 +133,7 @@
     position: absolute;
     bottom: 20px;
 }
-.card__edit_btn{
+.card__info_btn{
     height: 40px;
     width: 150px;
     border-radius: 5px;
@@ -148,16 +148,16 @@
     bottom: 65px; */
     transition: ease 0.4s;
 }
-.card__delete_btn{
+.card__edit_btn{
     margin-left: 15px;
     cursor: pointer;
 }
-/* .card__edit_btn:hover{
+/* .card__info_btn:hover{
     background-color: #1b2541;
     color: #ffffff;
     transition: all 0.3s ease 0s;
 }
-.card__delete_btn:hover{
+.card__edit_btn:hover{
     background-color: #1b2541;
     color: #ffffff;
     transition: all 0.3s ease 0s;

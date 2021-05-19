@@ -4,30 +4,28 @@ import ideaGif from '../../assets/img/idea.gif'
 import { useSelector, useDispatch } from 'react-redux'
 import { CardType } from '../../api/api'
 import { AppRootStateType } from '../../redux/store'
-import { getCardsTC, addCardTC, updateCardTC } from '../../redux/cards-reducer/cards-reducer'
-import { deleteCardTC } from '../../redux/cards-reducer/cards-reducer'
-import { IoTrashOutline as DeleteIcon} from 'react-icons/io5'
+import { getCardsTC, addCardTC } from '../../redux/cards-reducer/cards-reducer'
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
 import { useParams } from 'react-router-dom'
 import Paginator from '../../components/Paginator/Paginator'
 import Select from '../../components/Select/Select'
-import ModalPopup from '../../components/ModalPopup/ModalPopup'
+import CardInfoModal from './modals/CardInfoModal'
+import { FiEdit as EditIcon } from 'react-icons/fi'
+import CardEditModal from './modals/CardEditModal'
+import AddCardModal from './modals/AddCardModal'
 
 const Cards = () => {
     
     const dispatch = useDispatch()
     const {id} = useParams<{id: string}>()
     const cardPackId = id
-    
-    type ModalDataType = {
-        question: string
-        answer: string
-    } 
 
     const [foundQuestion, setFoundQuestion] = useState<string>('')
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [isShow, setIsShow] = useState<boolean>(false)
+    const [modalInfoShow, setModalInfoShow] = useState<boolean>(false)
     const [modalData, setModalData] = useState<ModalDataType>({} as ModalDataType)
+    const [modalEditShow, setModalEditShow] = useState<boolean>(false)
+    const [modalAddShow, setModalAddShow] = useState<boolean>(false)
 
     const cards = useSelector<AppRootStateType, CardType[]>((state) => state.cards.cards)
     const cardsTotalCount = useSelector<AppRootStateType, number>((state) => state.cards.cardsTotalCount)
@@ -42,9 +40,6 @@ const Cards = () => {
         window.scrollTo(0, 0)
     }, [itemsOnPage])
 
-    const onCardDelete = (cardId: string) => {
-        dispatch(deleteCardTC(cardId, cardPackId))
-    }
 
     const sliceAnswer = (string: string) => {
         if(string.length > 70) return string.slice(0, 70) + '...'
@@ -71,11 +66,7 @@ const Cards = () => {
     }
 
     const onAddNewCard = () => {
-        dispatch(addCardTC({cardsPack_id: cardPackId, question: 'New question', answer: 'Answer on question will be here'}))
-    }
-
-    const onUpdateCardInfo = (cardId: string) => {
-        dispatch(updateCardTC({_id: cardId, question: 'Update question', answer: 'Update answer',cardsPack_id: cardPackId}))
+        setModalAddShow(true)
     }
 
     const onPageChange = (pageNumber: number) => {
@@ -87,9 +78,14 @@ const Cards = () => {
         dispatch(getCardsTC({cardsPack_id: cardPackId, pageCount: +e.currentTarget.value}))
     }
 
-    const onOpenModal = (cardId: string, question: string, answer: string) => {
-        setIsShow(true)
+    const onClickInfo = (question: string, answer: string) => {
+        setModalInfoShow(true)
         setModalData({question, answer})
+    }
+
+    const onEditCard = (cardId: string, question: string, answer: string) => {
+        setModalEditShow(true)
+        setModalData({cardId, question, answer})
     }
 
     return (
@@ -120,8 +116,8 @@ const Cards = () => {
                             <div className={s.card__rate}>Your rate</div>
                             <div className={s.card__stars}>{checkOnNotInteger(card.grade)}</div>
                             <div className={s.card__buttons}>
-                                <button className={s.card__edit_btn} onClick={() => onOpenModal(card._id, card.question, card.answer)}>Click for info</button>
-                                <div><DeleteIcon className={s.card__delete_btn} onClick={() => onCardDelete(card._id)} size='30'/></div>
+                                <button className={s.card__info_btn} onClick={() => onClickInfo(card.question, card.answer)}>Click for info</button>
+                                <div><EditIcon className={s.card__edit_btn} size='28' onClick={() => onEditCard(card._id, card.question, card.answer)}/></div>
                             </div>
                         </div>
                     </div>
@@ -129,23 +125,47 @@ const Cards = () => {
             </div>
             <div className={s.cards__footer}>
                 <Paginator 
-                totalItemsCount={cardsTotalCount}
-                itemsOnPage={itemsOnPage}
-                currentPage={currentPage}
-                onPageChange={onPageChange}
+                    totalItemsCount={cardsTotalCount}
+                    itemsOnPage={itemsOnPage}
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
                 />
-                <div className={s.footer__select}><Select onSelectValue={onItemsCountChange}/></div>
+                <div className={s.footer__select}>
+                    <Select 
+                        onSelectValue={onItemsCountChange}
+                        selectValues={[9, 15, 30, 45, 99]}
+                    />
+                </div>
             </div>
-            <ModalPopup show={isShow} setShow={setIsShow}>
-                {
-                    <>
-                    <div>{modalData.question}</div>
-                    <div>{modalData.answer}</div>
-                    </>
-                }
-            </ModalPopup>
+            <CardInfoModal 
+                show={modalInfoShow}
+                setShow={setModalInfoShow}
+                question={modalData.question}
+                answer={modalData.answer}
+            />
+            <CardEditModal 
+                show={modalEditShow}
+                setShow={setModalEditShow}
+                cardPackId={cardPackId}
+                cardId={modalData.cardId!}
+                question={modalData.question}
+                answer={modalData.answer}
+            />
+            <AddCardModal
+                show={modalAddShow}
+                setShow={setModalAddShow}
+                cardPackId={cardPackId}
+            />
         </div>
     )
 }
 
 export default Cards
+
+
+// types
+type ModalDataType = {
+    question: string
+    answer: string
+    cardId?: string
+} 

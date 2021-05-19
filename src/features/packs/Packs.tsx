@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppRootStateType } from '../../redux/store'
 import { PacksType } from '../../api/api'
 import s from './Packs.module.css'
-import { getPacksTC, GetPacksRequestType, UpdatePackTC, deletePackTC, addNewPackTC } from '../../redux/packs-reducer/packs-reducer'
+import { getPacksTC, GetPacksRequestType } from '../../redux/packs-reducer/packs-reducer'
 import { Redirect, NavLink } from 'react-router-dom'
 import { SortDirection } from '../../helpers/enum'
 import { BiEdit as EditIcon } from 'react-icons/bi'
@@ -14,6 +14,9 @@ import { BsCaretDownFill as DownIcon } from 'react-icons/bs'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
 import Paginator from '../../components/Paginator/Paginator'
 import Select from '../../components/Select/Select'
+import AddPackModal from './modals/AddPackModal'
+import ModalDeletePack from './modals/ModalDeletePack'
+import ModalEditPack from './modals/ModalEditPack'
 
 const Packs = () => {
 
@@ -21,6 +24,10 @@ const Packs = () => {
 
     const [searchName, setSearchName] = useState('')
     const [currentPage, setCurrentPage] = useState<number>(1)
+    const [modalAddShow, setModalAddShow] = useState<boolean>(false)
+    const [modalDeleteShow, setModalDeleteShow] = useState<boolean>(false)
+    const [modalData, setModalData] = useState<ModalDataType>({} as ModalDataType)
+    const [modalEditShow, setModalEditShow] = useState<boolean>(false)
 
     const packs = useSelector<AppRootStateType, PacksType[]>((state) => state.packs.packs)
     const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.packs.error)
@@ -55,15 +62,17 @@ const Packs = () => {
 
 
     const onAddNewPack = () => {
-        dispatch(addNewPackTC('New title', {sortPacks: SortDirection.updateUp, packName: '', page: 1}))
+        setModalAddShow(true)
     }
 
-    const onPackDelete = (id: string) => {
-        dispatch(deletePackTC(id))
+    const onPackDelete = (packId: string) => {
+        setModalData({packId})
+        setModalDeleteShow(true)
     }
 
-    const onUpdatePack = (id: string, newTitle: string) => {
-        dispatch(UpdatePackTC(id, newTitle))
+    const onUpdatePack = (packId: string, packName: string) => {
+        setModalData({packId, packName})
+        setModalEditShow(true)
     }
 
     const searchByNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +147,7 @@ const Packs = () => {
                                 <td>{row.updated}</td>
                                 <td>
                                     <div className={s.action__btns}>
-                                        <EditIcon className={s.action__btn} size='25' onClick={() => onUpdatePack(row._id, "yo it's my pack")}/>
+                                        <EditIcon className={s.action__btn} size='25' onClick={() => onUpdatePack(row._id, row.name)}/>
                                         <DeleteIcon className={s.action__btn} size='27' onClick={() => onPackDelete(row._id)}/>
                                     </div>
                                 </td> 
@@ -149,12 +158,32 @@ const Packs = () => {
             </table> 
             <div className={s.table__footer}>
                 <Paginator 
-                totalItemsCount={packsTotalCount}
-                itemsOnPage={itemsOnPage}
-                currentPage={currentPage}
-                onPageChange={onPageChange}
+                    totalItemsCount={packsTotalCount}
+                    itemsOnPage={itemsOnPage}
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
                 />
-                <div className={s.footer__select}><Select onSelectValue={onItemsCountChange}/></div>
+                <div className={s.footer__select}>
+                    <Select 
+                        onSelectValue={onItemsCountChange}
+                        selectValues={[10, 25, 50, 100]}
+                    />
+                </div>
+                <AddPackModal 
+                    show={modalAddShow}
+                    setShow={setModalAddShow}
+                />
+                <ModalDeletePack 
+                    show={modalDeleteShow}
+                    setShow={setModalDeleteShow}
+                    packId={modalData.packId}
+                />
+                <ModalEditPack 
+                    show={modalEditShow}
+                    setShow={setModalEditShow}
+                    packId={modalData.packId}
+                    packName={modalData.packName!}
+                />
                 <AlertPopup message={serverErrorMessage}/>  
             </div>   
         </>
@@ -162,3 +191,10 @@ const Packs = () => {
 }
 
 export default Packs
+
+// types
+
+type ModalDataType = {
+    packId: string
+    packName?: string
+}
