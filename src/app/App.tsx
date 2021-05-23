@@ -43,6 +43,7 @@ const App = () => {
               <Route path='/newpassword' render={() => <div><NewPassword/></div>}/>
               <Route path='/packs' render={() => <Packs />}/>      
               <Route path='/cards/:id' render={() => <Cards />}/>  
+              <Route path='/learn/:id' render={() => <Learn />}/> 
               {/* <Route path='/test' render={() => <Test />}/>    */}
               <Route path='/' render={() => <Profile />}/> 
               <Route path='*' render={() => <div>404 Not Found</div>}/>    

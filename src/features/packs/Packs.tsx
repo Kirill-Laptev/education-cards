@@ -17,6 +17,7 @@ import Select from '../../components/Select/Select'
 import AddPackModal from './modals/AddPackModal'
 import ModalDeletePack from './modals/ModalDeletePack'
 import ModalEditPack from './modals/ModalEditPack'
+import Switch from '../../components/Switch/Switch'
 
 const Packs = () => {
 
@@ -28,6 +29,7 @@ const Packs = () => {
     const [modalDeleteShow, setModalDeleteShow] = useState<boolean>(false)
     const [modalData, setModalData] = useState<ModalDataType>({} as ModalDataType)
     const [modalEditShow, setModalEditShow] = useState<boolean>(false)
+    const [isPrivate, setIsPrivate] = useState(false)
 
     const packs = useSelector<AppRootStateType, PacksType[]>((state) => state.packs.packs)
     const serverErrorMessage = useSelector<AppRootStateType, string>((state) => state.packs.error)
@@ -36,13 +38,15 @@ const Packs = () => {
     const packsTotalCount = useSelector<AppRootStateType, number>((state) => state.packs.packsTotalCount)
     const itemsOnPage = useSelector<AppRootStateType, number>((state) => state.packs.requestParams.pageCount!)
     const page = useSelector<AppRootStateType, number>((state) => state.packs.requestParams.page!)
+    const userId = useSelector<AppRootStateType, string>((state) => state.profile._id)
 
     const columns = useMemo(() => [
         {id: 1, title: 'Name', icons: [<UpIcon size='15'/>, <DownIcon size='15'/>], sort: [SortDirection.nameUp, SortDirection.nameDown]},
         {id: 2, title: 'Cards count', icons: [<UpIcon size='15'/>, <DownIcon size='15'/>], sort: [SortDirection.countUp, SortDirection.countDown]},
         {id: 3, title: 'Updated', icons: [<UpIcon size='15'/>, <DownIcon size='15'/>], sort: [SortDirection.updateUp, SortDirection.updateDown]},
         {id: 4, title: 'Action'},
-        {id: 5, title: 'Cards'}
+        {id: 5, title: 'Cards'},
+        {id: 6, title: "Let's learn"}
     ], [])
 
     const packsRows = useMemo(() => packs, [packs])
@@ -96,6 +100,17 @@ const Packs = () => {
         dispatch(getPacksTC({pageCount: +e.currentTarget.value}))
     }
 
+    const onSwitchPrivatePack = () => {
+        if(!isPrivate){
+            setIsPrivate(true)
+            dispatch(getPacksTC({...requestParams, user_id: userId}))
+        } else {
+            setIsPrivate(false)
+            dispatch(getPacksTC({...requestParams, user_id: ''}))
+        }
+        
+    }
+
     if(!isLoggedIn){
         return <Redirect to='/login'/>
     }
@@ -117,6 +132,14 @@ const Packs = () => {
                 </div>
                 <div className={s.add}>
                     <button onClick={onAddNewPack}><AddIcon size='25'/><span>Add new cardspack</span></button>
+                </div>
+                <div className={s.private}>
+                    <div className={s.private__title}>My packs</div>
+                    <Switch 
+                        color='#64c37d'
+                        isOn={isPrivate}
+                        handleToggle={onSwitchPrivatePack}
+                    />
                 </div>
             </div>
             <table className={s.table}>
@@ -152,6 +175,7 @@ const Packs = () => {
                                     </div>
                                 </td> 
                                 <td><NavLink to={`/cards/${row._id}`}>Cards</NavLink></td>
+                                <td><NavLink to={`/learn/${row._id}`}>Learn</NavLink></td>
                             </tr>
                         ))}
                 </tbody>

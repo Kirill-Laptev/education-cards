@@ -15,8 +15,7 @@ const initialState: InitialState = {
         sortPacks: '0updated',
         page: 1,
         pageCount: 10,
-        userId: '',
-        // token: ''
+        user_id: ''
     },
     isPackActionSuccess: false
 }
@@ -149,6 +148,6 @@ export type GetPacksRequestType = {
     sortPacks?: string 
     page?: number
     pageCount?: number
-    userId?: string
+    user_id?: string
     token?: string
 }

@@ -65,14 +65,21 @@ export const cardsAPI = {
     },
     updateCard: (data: {_id: string, question?: string, answer?: string, cardsPack_id: string}) => {
         return instance.put<UpdatedCardResponseType>('cards/card', {card: data})
+    },
+    updateCardGrade: (data: {grade: number | null, card_id: string}) => {
+        return instance.put<UpdateGradeResponseType>('cards/grade', data)
     }
 }
+
+
+
 
 // export const profileAPI = {
 //     updateProfile: (data: {name: string, avatar: string}) => {
 //         return instance.put('auth/me', data)
 //     },
 // }
+
 
 // types
 
@@ -169,12 +176,12 @@ export type OnPackActionResponseType = {
 export type CardType = {
     answer: string
     cardsPack_id: string
-    comments: string
+    comments?: string
     created: string
     grade: number
-    more_id: string
+    more_id?: string
     question: string
-    questionImg: string
+    questionImg?: string
     rating: number
     shots: number
     type: string
@@ -218,8 +225,22 @@ export type UpdatedCardResponseType = {
     tokenDeathTime: number
 }
 
-
-
+export type UpdateGradeResponseType = {
+    updatedGrade: {
+        card_id: string
+        cardsPack_id: string
+        created: string
+        grade: number
+        more_id: string
+        shots: number
+        updated: string
+        user_id: string
+        __v: number
+        _id: string
+    }
+    token: string
+    tokenDeathTime: number
+}
 
 export type GetCardsRequestType = {
     cardAnswer?: string
@@ -232,22 +253,3 @@ export type GetCardsRequestType = {
     pageCount?: number
 }
 
-export type PostCardsRequestType = {
-    cardsPack_id: string
-    question: string
-    answer: string
-    grade?: number
-    shots?: number
-    rating?: number
-    answerImg?: string
-    questionImg?: string	
-    questionVideo?: string	
-    answerVideo?: string
-    type?: string
-}
-
-// export type UpdateCardRequestType = {     // card: {...}
-//     _id: string	
-//     question?: string		
-//     comments?: string	
-// }

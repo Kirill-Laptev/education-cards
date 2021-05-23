@@ -44,6 +44,18 @@ export const cardsReducer = (state: InitialStateType = initialState, action: Car
             return {
                 ...state,
                 isCardActionSuccess: action.isSuccess
+            }   
+            
+        case 'cards/REMOVED_PASSED_CARD':
+            return {
+                ...state,
+                cards: state.cards.filter((card) => card._id !== action.cardId)
+            }
+
+        case 'cards/SET_CARD_GRADE':
+            return {
+                ...state, 
+                cards: state.cards.map((card) => (card._id === action.cardId ? {...card, grade: action.grade} : card))
             }
 
         default:
@@ -55,9 +67,9 @@ export const cardsReducer = (state: InitialStateType = initialState, action: Car
 export const setCardsAC = (cards: Array<CardType>, cardsTotalCount: number) => ({type: 'cards/SET_CARDS', cards, cardsTotalCount} as const)
 const updateRequestParamsAC = (newParams: GetCardsRequestType) => ({type: 'cards/UPDATE_REQUEST_PARAMS', newParams} as const)
 const setErrorMessageAC = (errorMessage: string) => ({type: 'cards/SET_ERROR_MESSAGE', errorMessage} as const)
-// export const cardDeleteStatusAC = (isDelete: boolean) => ({type: 'cards/SET_CARD_DELETE_STATUS', isDelete} as const)
-// export const cardUpdateStatusAC = (isUpdate: boolean) => ({type: 'cards/SET_CARD_UPDATE_STATUS', isUpdate} as const)
 export const cardActionStatusAC = (isSuccess: boolean) => ({type: 'cards/SET_CARD_ACTION_STATUS', isSuccess} as const)
+export const removePassedCardAC = (cardId: string) => ({type: 'cards/REMOVED_PASSED_CARD', cardId} as const)
+export const setCardGradeAC = (cardId: string, grade: number) => ({type: 'cards/SET_CARD_GRADE', cardId, grade} as const)
 
 // thunks
 export const getCardsTC = (params: GetCardsRequestType): ThunkType => {
@@ -113,14 +125,24 @@ export const updateCardTC = (data: {_id: string, question?: string, answer?: str
     }
 }
 
+export const updateGradeTC = (cardId: string, grade: number): ThunkType => {
+    return async (dispatch: DispatchType) => {
+        try{    
+            await cardsAPI.updateCardGrade({card_id: cardId, grade})
+            dispatch(setCardGradeAC(cardId, grade))
+            // dispatch(removePassedCardAC(cardId))
+        } catch(e){
+            // Уточнить
+        }
+    }
+}
+
 // types
 type InitialStateType = {
     cards: Array<CardType>
     cardsTotalCount: number
     error: string
     requestParams: GetCardsRequestType
-    // isCardDelete: boolean
-    // isCardUpdate: boolean
     isCardActionSuccess: boolean
 }
 
@@ -129,6 +151,9 @@ export type CardsActionsType =
 | ReturnType<typeof updateRequestParamsAC>
 | ReturnType<typeof setErrorMessageAC>
 | ReturnType<typeof cardActionStatusAC>
+| ReturnType<typeof removePassedCardAC>
+| ReturnType<typeof setCardGradeAC>
+
 
 
 type DispatchType = ThunkDispatch<AppRootStateType, unknown, CardsActionsType>
