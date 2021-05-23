@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { AppRootStateType } from '../../redux/store'
 import { Redirect } from 'react-router-dom'
+import s from './Profile.module.css'
 
 const Profile = () => {
 
@@ -12,8 +13,12 @@ const Profile = () => {
     }
 
     return (
-        <div>
-            Profile Component
+        <div className={s.shamcards__header}>
+            <div className={s.shamcard__outer}><div>Card</div></div>
+            <div className={s.shamcard__outer}><div>Card</div></div>
+            <div className={s.shamcard__outer}><div>Card</div></div>
+            <div className={s.shamcard__outer}><div>Card</div></div>
+            <div className={s.shamcard__outer}><div>Card</div></div>
         </div>
     )
 }
