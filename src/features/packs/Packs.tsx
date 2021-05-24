@@ -83,8 +83,10 @@ const Packs = () => {
         setSearchName(e.currentTarget.value)
     }
     const onSearchClick = () => {
-        dispatch(getPacksTC({packName: searchName}))
-        setSearchName('')
+        if(searchName){
+            dispatch(getPacksTC({packName: searchName}))
+            setSearchName('')
+        }
     }
 
     const onSortClick = (SortDirection: string) => { 

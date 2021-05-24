@@ -3,6 +3,8 @@ import ModalPopup from '../../../components/ModalPopup/ModalPopup'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCardTC, cardActionStatusAC } from '../../../redux/cards-reducer/cards-reducer'
 import { AppRootStateType } from '../../../redux/store'
+import {BsX as CloseIcon} from 'react-icons/bs'
+import s from './AddCardModal.module.css'
 
 const CardAddModal: React.FC<PropsType> = ({show, setShow, cardPackId}) => {
 
@@ -32,20 +34,44 @@ const CardAddModal: React.FC<PropsType> = ({show, setShow, cardPackId}) => {
         dispatch(addCardTC({cardsPack_id: cardPackId, question, answer}))
     }
 
+    const closeModal = () => {
+        setShow(false)
+    }
+
     return (
-        <div>
+        <>
             <ModalPopup show={show} setShow={setShow}>
                 {
-                    <>
-                        <div><input onChange={questionEditHandler} value={question}/></div>
-                        <div><input onChange={answerEditHandler} value={answer}/></div>
-                        <div><button onClick={onAddNewCard}>ADD</button></div>
-                    </>
-                }
+                        <div className={s.modal}>
+                            <div className={s.modal__header}>
+                                <div>Add new card</div>
+                                <CloseIcon 
+                                    className={s.header__icon} 
+                                    size={35}
+                                    onClick={closeModal}
+                                />
+                            </div>
+                            <div className={s.modal__input}>
+                                <div className={s.input__title}>Question</div>
+                                <input onChange={questionEditHandler} value={question} placeholder='Write your question here'/>
+                            </div>
+                            <div className={s.modal__input}>
+                                <div className={s.input__title}>Answer</div>
+                                <input onChange={answerEditHandler} value={answer} placeholder='Write your answer here'/>
+                            </div>
+                            <div className={s.modal__buttons}>
+                                <button className={s.buttons__cancel} onClick={closeModal}>Cancel</button>
+                                <button className={s.buttons__save} onClick={onAddNewCard}>Save</button>
+                            </div>
+                        </div>
+                    }
             </ModalPopup>
-        </div>
+        </>
     )
 }
+
+ 
+
 
 type PropsType = {
     show: boolean
