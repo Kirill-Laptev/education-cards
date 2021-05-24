@@ -1,8 +1,10 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent, useRef } from 'react'
 import ModalPopup from '../../../components/ModalPopup/ModalPopup'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCardTC, updateCardTC, cardActionStatusAC } from '../../../redux/cards-reducer/cards-reducer'
 import { AppRootStateType } from '../../../redux/store'
+import {BsX as CloseIcon} from 'react-icons/bs'
+import s from './CardEditModal.module.css'
 
 const CardEditModal: React.FC<PropsType> = (props) => {
 
@@ -46,7 +48,7 @@ const CardEditModal: React.FC<PropsType> = (props) => {
         setCardQuestion(e.currentTarget.value)
     }
 
-    const answerEditHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const answerEditHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setCardAnswer(e.currentTarget.value)
     }
 
@@ -58,19 +60,39 @@ const CardEditModal: React.FC<PropsType> = (props) => {
         dispatch(deleteCardTC(cardId, cardPackId))
     }
 
+    const closeModal = () => {
+        setShow(false)
+    }
+
     return (
-        <div>
+        <>
             <ModalPopup show={show} setShow={setShow}>
                 {
-                    <>
-                        <div><input onChange={questionEditHandler} value={cardQuestion}/></div>
-                        <div><input onChange={answerEditHandler} value={cardAnswer}/></div>
-                        <div><button onClick={onUpdateCardInfo}>UPDATE</button></div>
-                        <div><button onClick={onCardDelete}>DELETE</button></div>
-                    </>
+                    <div className={s.modal}>
+                        <div className={s.modal__header}>
+                            <div>Edit card</div>
+                            <CloseIcon 
+                                className={s.header__icon} 
+                                size={35}
+                                onClick={closeModal}
+                            />
+                        </div>
+                        <div className={s.modal__input}>
+                            <div className={s.input__title}>Question</div>
+                            <input type='text' onChange={questionEditHandler} value={cardQuestion} placeholder='Write your question here'/>
+                        </div>
+                        <div className={s.modal__textarea}>
+                            <div className={s.textarea__title}>Answer</div>
+                            <textarea onChange={answerEditHandler} value={cardAnswer} placeholder='Write your answer here'/>
+                        </div>
+                        <div className={s.modal__buttons}>
+                            <button className={s.buttons__delete} onClick={onCardDelete}>Delete</button>
+                            <button className={s.buttons__save} onClick={onUpdateCardInfo}>Save</button>
+                        </div>
+                    </div>
                 }
             </ModalPopup>
-        </div>
+        </>
     )
 }
 
