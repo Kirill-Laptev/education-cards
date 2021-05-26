@@ -14,11 +14,7 @@ const Profile = () => {
 
     return (
         <div className={s.shamcards__header}>
-            <div className={s.shamcard__outer}><div>Card</div></div>
-            <div className={s.shamcard__outer}><div>Card</div></div>
-            <div className={s.shamcard__outer}><div>Card</div></div>
-            <div className={s.shamcard__outer}><div>Card</div></div>
-            <div className={s.shamcard__outer}><div>Card</div></div>
+            <h3>Profile component will be here</h3>
         </div>
     )
 }

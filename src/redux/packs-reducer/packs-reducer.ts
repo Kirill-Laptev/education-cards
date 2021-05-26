@@ -12,7 +12,7 @@ const initialState: InitialState = {
         packName: '',
         min: 0,
         max: 0,
-        sortPacks: '0updated',
+        sortPacks: '0cardsCount',
         page: 1,
         pageCount: 10,
         user_id: ''

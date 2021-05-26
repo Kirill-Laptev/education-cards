@@ -5,7 +5,6 @@ import {forgotPassTC, setInfoAC} from '../../redux/forgot-reducer/forgot-reducer
 import {AppRootStateType} from "../../redux/store";
 import s from "../forgot-password/ForgotPassword.module.css";
 import {TextError} from "../../helpers/TextError";
-import forgot from "../../assets/img/key.svg";
 import AlertPopup from '../../components/AlertPopup/AlertPopup';
 import { validateEmail } from '../../helpers/validators/validators';
 
@@ -79,7 +78,6 @@ const ForgotPasswordForm = () => {
                 <div className={s.form}>
                     <div className={s.form__header}>
                         <div>Forgot Password</div>
-                        <img src={forgot}/>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className={s.form__email}>
@@ -100,8 +98,6 @@ const ForgotPasswordForm = () => {
                 </div>
             </div>
             <AlertPopup message={serverErrorMessage} serverRequestSuccess={sendMessageSuccess}/>
-            {/* Email address not found /ᐠ-ꞈ-ᐟ\\ */}
-            {/* sent —ฅ/ᐠ.̫ .ᐟ\\ฅ— */}
         </>
 
     )

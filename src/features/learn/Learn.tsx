@@ -7,7 +7,6 @@ import { AppRootStateType } from '../../redux/store'
 import { CardType } from '../../api/api'
 import { getRandomCard } from '../../helpers/smart-random/smart-random'
 import Checkbox from '../../components/Checkbox/Checkbox'
-import Switch from '../../components/Switch/Switch'
 
 const grades = [
     {title: 'I know', value: 5}, 
@@ -44,7 +43,7 @@ const Learn = () => {
         }
     }, [])
 
-    // Мой вариант с обучением
+    // Еще один вариант с обучением
     // const onNextCard = () => {
     //     if(selectedAnswer && cards.length > 1){
     //         dispatch(updateGradeTC(card._id, selectedAnswer))
@@ -72,45 +71,36 @@ const Learn = () => {
     }
 
     return (
-        <div>
-            <div>LEARN PACK NAME</div>
-            <div>{card.question}</div>
-            {!showAnswer 
-                ? <button onClick={() => setShowAnswer(true)}>SHOW ANSWER</button>
-                : <div>{card.answer}</div>
-            }
-            {grades.map((grade) => (
-                <Checkbox 
-                    key={grade.value}
-                    value={grade.value}
-                    title={grade.title}
-                    selectedValue={selectedAnswer}
-                    onChangeValue={onGradeChange}
-                />
-            ))}
-            <div>
-                <button><NavLink to='/packs'>CANCEL</NavLink></button>
-                <button onClick={onNextCard}>NEXT</button>
+        <div className={s.learn}>
+            <div className={s.learn__inner}>
+                <div className={s.learn__title}>
+                    <div>LEARN PACK</div>
+                </div>
+                <div className={s.learn__question}>{card.question}</div>
+                {!showAnswer 
+                    ? <button className={s.learn__show} onClick={() => setShowAnswer(true)}>Show answer</button>
+                    : <div className={s.learn__answer}>{card.answer}</div>
+                }
+                <div className={s.learn__rate}>Rate yourself:</div>
+                <div className={s.learn__checkbox}>
+                    {grades.map((grade) => (
+                        
+                            <Checkbox 
+                                key={grade.value}
+                                value={grade.value}
+                                title={grade.title}
+                                selectedValue={selectedAnswer}
+                                onChangeValue={onGradeChange}
+                            />
+                    ))}
+                 </div>
+                <div className={s.buttons}>
+                    <button className={s.buttons__cancel}>Cancel</button>
+                    <button className={s.buttons__next} onClick={onNextCard}>Next</button>
+                </div>
             </div>
         </div>
     )
 }
 
 export default Learn
-
-
-
-    // const [card, setCard] = useState<CardType>({
-    //     _id: 'fake',
-    //     cardsPack_id: '',
-    //     answer: 'answer fake',
-    //     question: 'question fake',
-    //     grade: 0,
-    //     shots: 0,
-    //     type: '',
-    //     rating: 0,
-    //     user_id: '',
-    //     __v: 0,
-    //     created: '',
-    //     updated: ''
-    // })

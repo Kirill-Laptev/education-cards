@@ -12,10 +12,11 @@ const Header = () => {
 
     const logout = () => {
         dispatch(logoutTC())
+        //
     }
 
     const login = () => {
-        return <Redirect to='/login'/>
+        //
     }
 
     return (
