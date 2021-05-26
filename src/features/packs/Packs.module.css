@@ -113,6 +113,14 @@
     margin-left: 20px;
     cursor: pointer;
 }
+.action__cards{
+    color: #615dfa;
+    font-weight: 600;
+}
+.action__learn{
+    color: #615dfa;
+    font-weight: 600;
+}
 .action__btns{
     display: flex;
     justify-content: space-evenly;

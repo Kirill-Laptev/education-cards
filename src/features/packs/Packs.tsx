@@ -176,8 +176,8 @@ const Packs = () => {
                                         <DeleteIcon className={s.action__btn} size='27' onClick={() => onPackDelete(row._id)}/>
                                     </div>
                                 </td> 
-                                <td><NavLink to={`/cards/${row._id}`}>Cards</NavLink></td>
-                                <td><NavLink to={`/learn/${row._id}`}>Learn</NavLink></td>
+                                <td><NavLink className={s.action__cards} to={`/cards/${row._id}`}>Cards</NavLink></td>
+                                <td><NavLink className={s.action__learn} to={`/learn/${row._id}`}>Learn</NavLink></td>
                             </tr>
                         ))}
                 </tbody>

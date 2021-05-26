@@ -6,7 +6,6 @@ import {AppRootStateType} from '../../redux/store'
 import {TextError} from '../../helpers/TextError'
 import AlertPopup from '../../components/AlertPopup/AlertPopup'
 import {newPasswordTC} from "../../redux/password-reducer/password-reducer";
-import resetImg from './../../../src/assets/img/rotation-lock.svg'
 import { setInfoAC } from '../../redux/forgot-reducer/forgot-reducer'
 
 const NewPassword: React.FC = () => {
@@ -95,11 +94,10 @@ const NewPassword: React.FC = () => {
 
     return (
         <>
-            <div className={s.newPass__form}>
+            <div className={s.form__wrapper}>
                 <div className={s.form}>
                     <div className={s.form__header}>
                         <div>Set New Password</div>
-                        <img src={resetImg}/>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className={s.form__password}>

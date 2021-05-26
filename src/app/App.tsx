@@ -15,7 +15,7 @@ import Packs from '../features/packs/Packs';
 import RangeSlider from '../components/RangeSlider/RangeSlider'
 import Cards from '../features/cards/Cards';
 import Learn from '../features/learn/Learn';
-// import { Test } from '../components/ModalPopup/ModalPopup';
+import Test from '../features/testing/Test';
 
 
 const App = () => {
@@ -44,7 +44,7 @@ const App = () => {
               <Route path='/packs' render={() => <Packs />}/>      
               <Route path='/cards/:id' render={() => <Cards />}/>  
               <Route path='/learn/:id' render={() => <Learn />}/> 
-              {/* <Route path='/test' render={() => <Test />}/>    */}
+              <Route path='/test' render={() => <Test /> }/>   
               <Route path='/' render={() => <Profile />}/> 
               <Route path='*' render={() => <div>404 Not Found</div>}/>    
             </Switch>     
